@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: project-origin-ingress
+  namespace: project-origin
+spec:
+  rules:
+  - host: app.eloprindelse.dk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: example-frontend
+          servicePort: 80
+
+  - host: oauth.eloprindelse.dk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: hydra-service
+          servicePort: 80
+
+  - host: identity.eloprindelse.dk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: identity-service
+          servicePort: 80
+      
