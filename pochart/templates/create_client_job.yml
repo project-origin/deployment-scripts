@@ -1,0 +1,51 @@
+
+{{- $root := . -}}
+{{- range .Values.services }}
+{{- if .hydra_client }}
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hydra-create-client-{{ .name }}-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: hydra-create-client-{{ .name }}-container
+        image: oryd/hydra:v1.4.8
+        args:
+        - 'clients'
+        - 'create'
+        - '--endpoint'
+        - 'http://hydra-service:4445'
+        - '--skip-tls-verify'
+        - '--id'
+        - '$(HYDRA_CLIENT_ID)'
+        - '--name'
+        - '$(CLIENT_NAME)'
+        - --secret
+        - '$(HYDRA_CLIENT_SECRET)'
+        - '--grant-types'
+        - 'authorization_code,refresh_token'
+        - '--response-types'
+        - 'token,code,id_token'
+        - '--scope'
+        - 'openid,offline,profile,email,meteringpoints.read,measurements.read,ggo.read,ggo.transfer,ggo.retire'
+        - '--callbacks'
+        - '$(CLIENT_CALLBACK)'
+
+        envFrom:
+          - secretRef:
+              name: {{ .name }}-hydra-secret
+        env:
+        - name: CLIENT_NAME
+          value: {{ .hydra_client.name | quote }}
+        - name: CLIENT_CALLBACK
+          value: {{ .hydra_client.callback }}
+      restartPolicy: Never
+  backoffLimit: 10
+
+
+{{- end }}
+{{- end }}

@@ -1,0 +1,54 @@
+
+{{- $root := . -}}
+{{- range .Values.services }}
+{{- if .database }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-db-{{ .name }}-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: create-db-{{ .name }}-container
+        image: postgres:9.6
+        args:
+        - 'psql'
+        - 'postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres:5432/'
+        - '--command' 
+        - "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+        - '--command'
+        - "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
+
+        env:
+        - name: MASTER_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: username
+        - name: MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: password
+        - name: NEW_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .name }}-db-secret
+              key: username
+        - name: NEW_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .name }}-db-secret
+              key: password
+        - name: NEW_TABLE
+          valueFrom:
+            secretKeyRef:
+              name: {{ .name }}-db-secret
+              key: database
+      restartPolicy: Never
+  backoffLimit: 4
+
+{{- end }}
+{{- end }}

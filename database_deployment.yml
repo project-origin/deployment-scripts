@@ -30,3 +30,14 @@ spec:
         image: postgres:9.6
         ports:
         - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: password

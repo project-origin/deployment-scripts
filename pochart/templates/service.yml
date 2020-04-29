@@ -1,0 +1,21 @@
+
+{{- $root := . -}}
+
+
+{{- range .Values.services }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}-service
+spec:
+  ports:
+{{- range .ports }}
+  - name: {{ .name | quote }}
+    port: {{ .port }}
+    targetPort: {{ .targetPort }}
+{{- end }}
+  selector:
+    app: {{ .name }}-deployment
+
+{{- end }}

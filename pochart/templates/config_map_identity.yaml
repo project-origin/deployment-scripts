@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: identity-config
+data:
+  DATABASE_CONN_POLL_SIZE: '10'
+  TOKEN_EXPIRE_MINUTES: '4320'
+  HYDRA_URL: 'http://{{ .Values.services.hydra.name }}-service:4445'
+  FAILURE_REDIRECT_URL: '{{ .Values.protocol }}://{{ .Values.services.example_frontend.ingress.subdomain }}.{{ .Values.domain }}'

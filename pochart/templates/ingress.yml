@@ -1,0 +1,23 @@
+
+{{- $root := . -}}
+
+apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: po-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  {{- range .Values.services }}
+  {{- if .ingress }}
+  - host: {{ .ingress.subdomain }}.{{ $root.Values.domain }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .name }}-service
+          servicePort: 80
+  {{- end }}
+  {{- end }}

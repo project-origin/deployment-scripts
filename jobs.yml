@@ -1,0 +1,351 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: example-app-create-db-job
+  namespace: project-origin
+spec:
+  template:
+    spec:
+      containers:
+      - name: example-app-create-db-container
+        image: postgres:9.6
+        args:
+        - 'psql'
+        - 'postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres:5432/'
+        - '--command' 
+        - "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+        - '--command'
+        - "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
+
+        env:
+        - name: MASTER_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: username
+        - name: MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: password
+        - name: NEW_USER
+          valueFrom:
+            secretKeyRef:
+              name: example-app-db-secret
+              key: username
+        - name: NEW_PASS
+          valueFrom:
+            secretKeyRef:
+              name: example-app-db-secret
+              key: password
+        - name: NEW_TABLE
+          valueFrom:
+            secretKeyRef:
+              name: example-app-db-secret
+              key: database
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: account-service-create-db-job
+  namespace: project-origin
+spec:
+  template:
+    spec:
+      containers:
+      - name: account-service-create-db-container
+        image: postgres:9.6
+        args:
+        - 'psql'
+        - 'postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres:5432/'
+        - '--command' 
+        - "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+        - '--command'
+        - "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
+
+        env:
+        - name: MASTER_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: username
+        - name: MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: password
+        - name: NEW_USER
+          valueFrom:
+            secretKeyRef:
+              name: account-service-db-secret
+              key: username
+        - name: NEW_PASS
+          valueFrom:
+            secretKeyRef:
+              name: account-service-db-secret
+              key: password
+        - name: NEW_TABLE
+          valueFrom:
+            secretKeyRef:
+              name: account-service-db-secret
+              key: database
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: datahub-service-create-db-job
+  namespace: project-origin
+spec:
+  template:
+    spec:
+      containers:
+      - name: datahub-service-create-db-container
+        image: postgres:9.6
+        args:
+        - 'psql'
+        - 'postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres:5432/'
+        - '--command' 
+        - "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+        - '--command'
+        - "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
+
+        env:
+        - name: MASTER_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: username
+        - name: MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: password
+        - name: NEW_USER
+          valueFrom:
+            secretKeyRef:
+              name: datahub-service-db-secret
+              key: username
+        - name: NEW_PASS
+          valueFrom:
+            secretKeyRef:
+              name: datahub-service-db-secret
+              key: password
+        - name: NEW_TABLE
+          valueFrom:
+            secretKeyRef:
+              name: datahub-service-db-secret
+              key: database
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hydra-create-db-job
+  namespace: project-origin
+spec:
+  template:
+    spec:
+      containers:
+      - name: hydra-create-db-container
+        image: postgres:9.6
+        args:
+        - 'psql'
+        - 'postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres:5432/'
+        - '--command' 
+        - "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+        - '--command'
+        - "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
+
+        env:
+        - name: MASTER_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: username
+        - name: MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: password
+        - name: NEW_USER
+          valueFrom:
+            secretKeyRef:
+              name: hydra-db-secret
+              key: username
+        - name: NEW_PASS
+          valueFrom:
+            secretKeyRef:
+              name: hydra-db-secret
+              key: password
+        - name: NEW_TABLE
+          valueFrom:
+            secretKeyRef:
+              name: hydra-db-secret
+              key: database
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: identity-service-create-db-job
+  namespace: project-origin
+spec:
+  template:
+    spec:
+      containers:
+      - name:  identity-service-create-db-container
+        image: postgres:9.6
+        args:
+        - 'psql'
+        - 'postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres:5432/'
+        - '--command' 
+        - "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+        - '--command'
+        - "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
+
+        env:
+        - name: MASTER_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: username
+        - name: MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: password
+        - name: NEW_USER
+          valueFrom:
+            secretKeyRef:
+              name: identity-service-db-secret
+              key: username
+        - name: NEW_PASS
+          valueFrom:
+            secretKeyRef:
+              name: identity-service-db-secret
+              key: password
+        - name: NEW_TABLE
+          valueFrom:
+            secretKeyRef:
+              name: identity-service-db-secret
+              key: database
+      restartPolicy: Never
+  backoffLimit: 4
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hydra-create-client-example-app-job
+  namespace: project-origin
+spec:
+  template:
+    spec:
+      containers:
+      - name: hydra-create-client-example-app-container
+        image: oryd/hydra:v1.4.8
+        args:
+        - 'clients'
+        - 'create'
+        - '--endpoint'
+        - 'http://hydra-service:4445'
+        - '--skip-tls-verify'
+        - '--id'
+        - '$(CLIENT_USERNAME)'
+        - '--name'
+        - '$(CLIENT_NAME)'
+        - --secret
+        - '$(CLIENT_PASSWORD)'
+        - '--grant-types'
+        - 'authorization_code,refresh_token'
+        - '--response-types'
+        - 'token,code,id_token'
+        - '--scope'
+        - 'openid,offline,profile,email,meteringpoints.read,measurements.read,ggo.read,ggo.transfer,ggo.retire'
+        - '--callbacks'
+        - '$(CLIENT_CALLBACK)'
+        env:
+        - name: CLIENT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: example-app-hydra-secret
+              key: username
+        - name: CLIENT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: example-app-hydra-secret
+              key: password
+        - name: CLIENT_NAME
+          valueFrom:
+            secretKeyRef:
+              name: example-app-hydra-secret
+              key: name
+        - name: CLIENT_CALLBACK
+          valueFrom:
+            secretKeyRef:
+              name: example-app-hydra-secret
+              key: callback
+      restartPolicy: Never
+  backoffLimit: 10
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hydra-create-account-service-app-job
+  namespace: project-origin
+spec:
+  template:
+    spec:
+      containers:
+      - name: hydra-create-account-service-app-container
+        image: oryd/hydra:v1.4.8
+        args:
+        - 'clients'
+        - 'create'
+        - '--endpoint'
+        - 'http://hydra-service:4445'
+        - '--skip-tls-verify'
+        - '--id'
+        - '$(CLIENT_USERNAME)'
+        - '--name'
+        - '$(CLIENT_NAME)'
+        - --secret
+        - '$(CLIENT_PASSWORD)'
+        - '--grant-types'
+        - 'authorization_code,refresh_token'
+        - '--response-types'
+        - 'token,code,id_token'
+        - '--scope'
+        - 'openid,offline,profile,email,meteringpoints.read,measurements.read,ggo.read,ggo.transfer,ggo.retire'
+        - '--callbacks'
+        - '$(CLIENT_CALLBACK)'
+        env:
+        - name: CLIENT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: account-service-hydra-secret
+              key: username
+        - name: CLIENT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: account-service-hydra-secret
+              key: password
+        - name: CLIENT_NAME
+          valueFrom:
+            secretKeyRef:
+              name: account-service-hydra-secret
+              key: name
+        - name: CLIENT_CALLBACK
+          valueFrom:
+            secretKeyRef:
+              name: account-service-hydra-secret
+              key: callback
+      restartPolicy: Never
+  backoffLimit: 10

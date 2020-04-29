@@ -1,0 +1,169 @@
+
+protocol: http
+domain: dev.eloprindelse.dk
+debug: 1
+
+services:
+
+  account:
+    name: account
+    ingress: 
+      subdomain: account
+    database: true
+    flask_secret: true
+    hydra_client:
+      name: "Account Service"
+      callback: /auth/login/callback
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 8085
+
+  datahub:
+    name: datahub
+    ingress: 
+      subdomain: datahub
+    database: true
+    flask_secret: true
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 8089
+  
+  energy_type:
+    name: energy-type
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 8765
+
+  example_backend:
+    name: example-backend
+    ingress: 
+      subdomain: api.app
+    database: true
+    flask_secret: true
+    hydra_client:
+      name: "Example Backend"
+      callback: /auth/login/callback
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 8081
+      - name: 'https'
+        port: 443
+        targetPort: 8081
+
+  example_frontend:
+    name: example-frontend
+    ingress: 
+      subdomain: app
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 80
+
+  identity:
+    name: identity
+    ingress: 
+      subdomain: identity
+    database: true
+    flask_secret: true
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 9120
+
+  hydra:
+    name: hydra
+    ingress: 
+      subdomain: oauth
+    database: true
+    flask_secret: true
+    ports:
+      - name: 'public-interface'
+        port: 80
+        targetPort: 4444
+      - name: 'admin-interface'
+        port: 4445
+        targetPort: 4445
+    
+  ledger:
+    name: hyperledger
+    ingress: 
+      subdomain: ledger
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 8008
+
+
+
+
+# imagePullSecrets: []
+# nameOverride: ""
+# fullnameOverride: ""
+
+# serviceAccount:
+#   # Specifies whether a service account should be created
+#   create: true
+#   # Annotations to add to the service account
+#   annotations: {}
+#   # The name of the service account to use.
+#   # If not set and create is true, a name is generated using the fullname template
+#   name: ""
+
+# podAnnotations: {}
+
+# podSecurityContext: {}
+#   # fsGroup: 2000
+
+# securityContext: {}
+#   # capabilities:
+#   #   drop:
+#   #   - ALL
+#   # readOnlyRootFilesystem: true
+#   # runAsNonRoot: true
+#   # runAsUser: 1000
+
+# service:
+#   type: ClusterIP
+#   port: 80
+
+# ingress:
+#   enabled: false
+#   annotations: {}
+#     # kubernetes.io/ingress.class: nginx
+#     # kubernetes.io/tls-acme: "true"
+#   hosts:
+#     - host: chart-example.local
+#       paths: []
+#   tls: []
+#   #  - secretName: chart-example-tls
+#   #    hosts:
+#   #      - chart-example.local
+
+# resources: {}
+#   # We usually recommend not to specify default resources and to leave this as a conscious
+#   # choice for the user. This also increases chances charts run on environments with little
+#   # resources, such as Minikube. If you do want to specify resources, uncomment the following
+#   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+#   # limits:
+#   #   cpu: 100m
+#   #   memory: 128Mi
+#   # requests:
+#   #   cpu: 100m
+#   #   memory: 128Mi
+
+# autoscaling:
+#   enabled: false
+#   minReplicas: 1
+#   maxReplicas: 100
+#   targetCPUUtilizationPercentage: 80
+#   # targetMemoryUtilizationPercentage: 80
+
+# nodeSelector: {}
+
+# tolerations: []
+
+# affinity: {}

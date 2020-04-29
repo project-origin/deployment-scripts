@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-backend-config
+data:
+  DATABASE_CONN_POLL_SIZE: '10'
+  CORS_ORIGINS: '{{ .Values.protocol }}://{{ .Values.services.example_frontend.ingress.subdomain }}.{{ .Values.domain }}'
+  PROJECT_URL: '{{ .Values.protocol }}://{{ .Values.services.example_backend.ingress.subdomain }}.{{ .Values.domain }}'
+  FRONTEND_URL: '{{ .Values.protocol }}://{{ .Values.services.example_frontend.ingress.subdomain }}.{{ .Values.domain }}'
+  DATAHUB_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.services.datahub.ingress.subdomain }}.{{ .Values.domain }}'
+  ACCOUNT_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.services.account.ingress.subdomain }}.{{ .Values.domain }}'
+  ACCOUNT_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.services.account.ingress.subdomain }}.{{ .Values.domain }}/auth/login'
+  HYDRA_URL: '{{ .Values.protocol }}://{{ .Values.services.hydra.ingress.subdomain }}.{{ .Values.domain }}'
+  HYDRA_INTROSPECT_URL: '{{ .Values.protocol }}://{{ .Values.services.hydra.name }}-service:4445/oauth2/introspect'
+  REDIS_HOST: 'redis-service' 
+  REDIS_PORT: '6379'
+  REDIS_USERNAME: ''
+  REDIS_PASSWORD: ''
+  REDIS_CACHE_DB: '0'
+  REDIS_BROKER_DB: '1'
+  REDIS_BACKEND_DB: '2'
