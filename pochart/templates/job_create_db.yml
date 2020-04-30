@@ -8,6 +8,7 @@ kind: Job
 metadata:
   name: create-db-{{ .name }}-job
 spec:
+  ttlSecondsAfterFinished: 60
   template:
     spec:
       containers:
@@ -26,27 +27,27 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-master-secret
-              key: username
+              key: USERNAME
         - name: MASTER_PASSWORD
           valueFrom:
             secretKeyRef:
               name: postgres-master-secret
-              key: password
+              key: PASSWORD
         - name: NEW_USER
           valueFrom:
             secretKeyRef:
               name: {{ .name }}-db-secret
-              key: username
+              key: USERNAME
         - name: NEW_PASS
           valueFrom:
             secretKeyRef:
               name: {{ .name }}-db-secret
-              key: password
+              key: PASSWORD
         - name: NEW_TABLE
           valueFrom:
             secretKeyRef:
               name: {{ .name }}-db-secret
-              key: database
+              key: DATABASE
       restartPolicy: Never
   backoffLimit: 4
 

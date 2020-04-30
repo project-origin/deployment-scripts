@@ -6,9 +6,26 @@ kind: Ingress
 metadata:
   name: po-ingress
   annotations:
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.class: nginx
+
+    {{- if .Values.tls }}
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: {{ .Values.tls.issuer | quote }}
+    {{- end }}
 spec:
+
+{{- if .Values.tls }}
+  tls:
+    - secretName: {{ .Values.tls.secret }}
+      hosts:
+{{- range .Values.services }}
+{{- if .ingress }}
+        - {{ .ingress.subdomain }}.{{ $root.Values.domain }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+
   rules:
   {{- range .Values.services }}
   {{- if .ingress }}

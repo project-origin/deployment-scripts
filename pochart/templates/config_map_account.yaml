@@ -9,7 +9,7 @@ data:
   DATAHUB_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.services.datahub.ingress.subdomain }}.{{ .Values.domain }}'
   LEDGER_URL: '{{ .Values.protocol }}://{{ .Values.services.ledger.ingress.subdomain }}.{{ .Values.domain }}'
   HYDRA_URL: '{{ .Values.protocol }}://{{ .Values.services.hydra.ingress.subdomain }}.{{ .Values.domain }}'
-  HYDRA_INTROSPECT_URL: '{{ .Values.protocol }}://{{ .Values.services.hydra.name }}-service:4445/oauth2/introspect'
+  HYDRA_INTROSPECT_URL: 'http://{{ .Values.services.hydra.name }}-service:4445/oauth2/introspect'
   REDIS_HOST: 'redis-service' 
   REDIS_PORT: '6379'
   REDIS_USERNAME: ''

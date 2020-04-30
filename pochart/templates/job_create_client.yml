@@ -9,6 +9,7 @@ kind: Job
 metadata:
   name: hydra-create-client-{{ .name }}-job
 spec:
+  ttlSecondsAfterFinished: 60
   template:
     spec:
       containers:
@@ -42,7 +43,7 @@ spec:
         - name: CLIENT_NAME
           value: {{ .hydra_client.name | quote }}
         - name: CLIENT_CALLBACK
-          value: {{ .hydra_client.callback }}
+          value: https://{{ .ingress.subdomain }}.{{ $root.Values.domain }}{{ .hydra_client.callback }}
       restartPolicy: Never
   backoffLimit: 10
 
