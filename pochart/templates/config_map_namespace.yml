@@ -4,3 +4,6 @@ metadata:
   name: namespace-config
 data:
   DEBUG: {{ .Values.debug | quote }}
+  {{- if .Values.instrumentation_key}}
+  AZURE_APP_INSIGHTS_CONN_STRING: {{ .Values.instrumentation_key | quote }}
+  {{- end }}

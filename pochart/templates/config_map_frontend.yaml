@@ -5,3 +5,4 @@ metadata:
 data:
   API_URL: '{{ .Values.protocol }}://{{ .Values.services.example_backend.ingress.subdomain }}.{{ .Values.domain }}'
   AUTH_URL: '{{ .Values.protocol }}://{{ .Values.services.example_backend.ingress.subdomain }}.{{ .Values.domain }}/auth/login'
+  LOGOUT_URL: '{{ .Values.protocol }}://{{ .Values.services.example_backend.ingress.subdomain }}.{{ .Values.domain }}/auth/logout'

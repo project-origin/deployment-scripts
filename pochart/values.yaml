@@ -2,11 +2,13 @@
 
 protocol: https
 tls:
-  issuer: letsencrypt-staging
+  issuer: letsencrypt-prod
   secret: eloprindelse-tls-cert
 
-domain: dev.eloprindelse.dk
+domain: alpha.eloprindelse.dk
 debug: 1
+
+instrumentation_key: InstrumentationKey=07ce92d2-e6c6-4ea0-9e95-0b2c7efe3816
 
 services:
 
