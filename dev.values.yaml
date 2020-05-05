@@ -1,0 +1,12 @@
+
+
+domain: dev.eloprindelse.dk
+
+tls:
+    issuer: letsencrypt-prod
+
+
+postgres:
+    host: alpha-postgres.icux2jihe3iurkbrcrsxwei1jf.ax.internal.cloudapp.net 
+    username: postgres
+    password: 9#Y3M&Eq&g!yc9^#7SD

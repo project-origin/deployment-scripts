@@ -10,6 +10,7 @@ debug: 1
 
 instrumentation_key: InstrumentationKey=07ce92d2-e6c6-4ea0-9e95-0b2c7efe3816
 
+
 services:
 
   account:
