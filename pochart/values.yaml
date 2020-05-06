@@ -2,14 +2,21 @@
 
 protocol: https
 tls:
-  issuer: letsencrypt-prod
+  issuer: letsencrypt-staging
   secret: eloprindelse-tls-cert
 
-domain: alpha.eloprindelse.dk
+domain: dev.eloprindelse.dk
 debug: 1
 
-instrumentation_key: InstrumentationKey=07ce92d2-e6c6-4ea0-9e95-0b2c7efe3816
+eloverblik:
+  service: 'https://apipreprod.eloverblik.dk/ThirdPartyApi'
+  onboarding: 'https://preprod.eloverblik.dk/Authorization/authorization'
 
+  # This is a token in the public test system, you an generate your own if this is out of date.
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJUSElSRFBBUlRZQVBJX1JlZnJlc2giLCJ0b2tlbmlkIjoiNzIyMjI1NDktNTFmZi00ZjI0LWEwOTYtMmU1MWM2OTRkYmFhIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiJHVUlJbnRyb1RoaXJkUGFydHkwMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6IkZvcm5hdm4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zdXJuYW1lIjoiRWZ0ZXJuYXZuIiwianRpIjoiNzIyMjI1NDktNTFmZi00ZjI0LWEwOTYtMmU1MWM2OTRkYmFhIiwiY3ZyIjoiMjcwNzE0MDEiLCJ0cGlkIjoiR1VJSW50cm9UaGlyZFBhcnR5MDFUcElkIiwibG9naW5UeXBlIjoiS2V5Q2FyZCIsImV4cCI6MTYxOTYwNjUwMCwiaXNzIjoiRW5lcmdpbmV0IiwidG9rZW5OYW1lIjoibnktdGVzdC10b2tlbiIsInJvbGVzIjoiUmVhZFByaXZhdGUsIFJlYWRCdXNpbmVzcyIsImF1ZCI6IkVuZXJnaW5ldCJ9.TeN20r7yej0WGZu87flUdV4TGoJAOp7UQN2nLoiG0-M
+
+postgres:
+  prefix: dev
 
 services:
 

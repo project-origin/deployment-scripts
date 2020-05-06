@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: postgres-service
 spec:
-{{- if .Values.postgres }}
+{{- if .Values.postgres.host }}
   type: ExternalName
   externalName: {{ .Values.postgres.host | quote }}
 {{- else }}
