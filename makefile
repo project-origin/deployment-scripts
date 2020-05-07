@@ -57,15 +57,15 @@ setup-cert-prod:
 
 	# setup an ingress service
 	helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-	helm install nginx stable/nginx-ingress \
-		--namespace ingress-basic \
-		--set controller.replicaCount=2 \
-		--set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
-		--set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
+helm install nginx stable/nginx-ingress \
+	--namespace ingress-basic \
+	--set controller.replicaCount=3 \
+	--set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+	--set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
 
 	# setup certs.
 	helm repo add jetstack https://charts.jetstack.io
 	kubectl create namespace cert-manager
 	kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.14.1/cert-manager.crds.yaml
-	kubectl apply -f letsencrypt-prod.yaml
+	kubectl apply -f deployment-scripts/letsencrypt-prod.yaml
 	helm install cert-manager --namespace cert-manager jetstack/cert-manager --version v0.14.1
