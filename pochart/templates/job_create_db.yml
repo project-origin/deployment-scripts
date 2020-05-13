@@ -8,7 +8,6 @@ kind: Job
 metadata:
   name: create-db-{{ .name }}-job
 spec:
-  ttlSecondsAfterFinished: 60
   template:
     spec:
       containers:

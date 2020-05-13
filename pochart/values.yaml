@@ -8,6 +8,14 @@ tls:
 domain: dev.eloprindelse.dk
 debug: 1
 
+
+email:
+    sendgrid_key: _
+    support: _
+    sender_address: noreploy@eloprindelse.dk
+    sender_name: Eloprindelse
+    
+
 eloverblik:
   service: 'https://apipreprod.eloverblik.dk/ThirdPartyApi'
   onboarding: 'https://preprod.eloverblik.dk/Authorization/authorization'
