@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: namespace-config
-data:
-  DEBUG: {{ .Values.debug | quote }}

@@ -12,6 +12,20 @@ spec:
   ttlSecondsAfterFinished: 60
   template:
     spec:
+      initContainers:
+      - name: hydra-delete-client-{{ .name }}-container
+        image: oryd/hydra:v1.4.8
+        args:
+          - 'clients'
+          - 'delete'
+          - '--endpoint'
+          - 'http://hydra-service:4445'
+          - '--skip-tls-verify'
+          - '$(HYDRA_CLIENT_ID)'
+        envFrom:
+          - secretRef:
+              name: {{ .name }}-hydra-secret
+
       containers:
       - name: hydra-create-client-{{ .name }}-container
         image: oryd/hydra:v1.4.8
@@ -32,7 +46,7 @@ spec:
         - '--response-types'
         - 'token,code,id_token'
         - '--scope'
-        - 'openid,offline,profile,email,meteringpoints.read,measurements.read,ggo.read,ggo.transfer,ggo.retire'
+        - 'openid,offline,profile,email,meteringpoints.read,measurements.read,ggo.read,ggo.transfer,ggo.retire,disclosure'
         - '--callbacks'
         - '$(CLIENT_CALLBACK)'
 
@@ -45,7 +59,7 @@ spec:
         - name: CLIENT_CALLBACK
           value: https://{{ .ingress.subdomain }}.{{ $root.Values.domain }}{{ .hydra_client.callback }}
       restartPolicy: Never
-  backoffLimit: 10
+  backoffLimit: 20
 
 
 {{- end }}

@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+    - master
+    - develop
+
+# no PR triggers
+pr: none
+
+resources:
+- repo: self
+
+variables:
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+    kube-con: 'test-kube-con'
+    namespace: 'test-project-origin'
+    secure-file-name: 'test.values.yaml'
+  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
+    kube-con: 'dev-kube-con'
+    namespace: 'dev-project-origin'
+    secure-file-name: 'dev.values.yaml'
+
+steps:
+  - task: DownloadSecureFile@1
+    name: overrideFile
+    inputs:
+      secureFile: $(secure-file-name)
+
+  - task: HelmDeploy@0
+    displayName: Helm upgrade
+    inputs:
+      connectionType: 'Kubernetes Service Connection'
+      kubernetesServiceConnection: $(kube-con)
+      namespace: $(namespace)
+      command: upgrade
+      chartType: filepath
+      chartPath: ./chart
+      releaseName: base-setup
+      valueFile: $(overrideFile.secureFilePath)
+      install: true
+      waitForExecution: true
