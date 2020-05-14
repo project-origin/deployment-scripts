@@ -22,6 +22,7 @@ variables:
 
 steps:
   - task: DownloadSecureFile@1
+    name: overrideFile
     inputs:
       secureFile: $(secure-file-name)
 
@@ -35,6 +36,6 @@ steps:
       chartType: filepath
       chartPath: ./chart
       releaseName: base-setup
-      valueFile: $(secure-file-name)
+      valueFile: $(overrideFile.secureFilePath)
       install: true
       waitForExecution: true
