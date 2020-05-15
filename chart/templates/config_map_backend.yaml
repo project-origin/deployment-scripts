@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: example-backend-config
 data:
-  DATABASE_CONN_POLL_SIZE: '10'
+  DATABASE_CONN_POLL_SIZE: '3'
   CORS_ORIGINS: '{{ .Values.protocol }}://{{ .Values.services.example_frontend.ingress.subdomain }}.{{ .Values.domain }}'
   PROJECT_URL: '{{ .Values.protocol }}://{{ .Values.services.example_backend.ingress.subdomain }}.{{ .Values.domain }}'
   FRONTEND_URL: '{{ .Values.protocol }}://{{ .Values.services.example_frontend.ingress.subdomain }}.{{ .Values.domain }}'
