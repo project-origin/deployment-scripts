@@ -115,8 +115,6 @@ services:
     
   ledger:
     name: hyperledger
-    ingress: 
-      subdomain: ledger
     ports:
       - name: 'http'
         port: 80

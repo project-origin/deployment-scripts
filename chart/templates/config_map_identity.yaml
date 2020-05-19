@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: identity-config
 data:
-  DATABASE_CONN_POLL_SIZE: '10'
+  DATABASE_CONN_POLL_SIZE: '3'
   TOKEN_EXPIRE_MINUTES: '4320'
   PROJECT_URL: '{{ .Values.protocol }}://{{ .Values.services.identity.ingress.subdomain }}.{{ .Values.domain }}'
   HYDRA_URL: 'http://{{ .Values.services.hydra.name }}-service:4445'
