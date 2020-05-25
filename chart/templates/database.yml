@@ -13,6 +13,18 @@ spec:
   selector:
     app: postgres-deployment
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-postgres-storage-disk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,19 +40,27 @@ spec:
         app: postgres-deployment
     spec:
       containers:
-      - name: postgres-container
-        image: postgres:9.6
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-master-secret
-              key: USERNAME
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-master-secret
-              key: PASSWORD
+        - name: postgres-container
+          image: postgres:9.6
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-master-secret
+                  key: USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-master-secret
+                  key: PASSWORD
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: dev-postgres-storage-disk
+
 {{- end }}
