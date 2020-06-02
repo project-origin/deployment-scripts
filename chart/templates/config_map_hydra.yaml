@@ -12,4 +12,4 @@ data:
   TTL_REFRESH_TOKEN: '720h'
   TTL_ACCESS_TOKEN: '6h'
   TTL_ID_TOKEN: '6h'
-  LOG_LEVEL: 'trace'
+  LOG_LEVEL: 'debug'
