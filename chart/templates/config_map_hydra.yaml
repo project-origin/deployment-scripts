@@ -9,3 +9,7 @@ data:
   URLS_LOGOUT: '{{ .Values.protocol }}://{{ .Values.services.identity.ingress.subdomain }}.{{ .Values.domain }}/logout'
   URLS_ERROR: '{{ .Values.protocol }}://{{ .Values.services.example_backend.ingress.subdomain }}.{{ .Values.domain }}/auth/error'
   URLS_POST_LOGOUT_REDIRECT: '{{ .Values.protocol }}://{{ .Values.services.example_frontend.ingress.subdomain }}.{{ .Values.domain }}'
+  TTL_REFRESH_TOKEN: '720h'
+  TTL_ACCESS_TOKEN: '72h'
+  TTL_ID_TOKEN: '72h'
+  LOG_LEVEL: 'debug'
