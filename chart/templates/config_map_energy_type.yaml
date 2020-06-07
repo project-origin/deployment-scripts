@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: energy-type-config
+data:
+  ENERGYCODE_FILE: /mnt/energy/mapped.parquet

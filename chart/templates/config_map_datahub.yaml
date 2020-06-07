@@ -23,3 +23,7 @@ data:
   ELOVERBLIK_ONBOARDING_URL: '{{ .Values.eloverblik.onboarding }}'
   ELOVERBLIK_REQUEST_ACCESS_FROM: '2020-04-01'
   ELOVERBLIK_REQUEST_ACCESS_TO: '2020-12-31'
+{{- if .Values.first_measurement_time }}
+  FIRST_MEASUREMENT_TIME: '{{ .Values.first_measurement_time }}'
+{{- end }}
+

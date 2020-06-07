@@ -13,13 +13,17 @@ spec:
       containers:
       - name: create-db-{{ .name }}-container
         image: postgres:9.6
+        command:
+          - bash
+          - -c
         args:
-        - 'psql'
-        - 'postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres-service:5432/'
-        - '--command' 
-        - "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
-        - '--command'
-        - "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
+          - sleep 45 &&
+            psql
+            postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres-service:5432/
+            --command 
+            "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+            --command
+            "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
 
         env:
         - name: MASTER_USER
@@ -48,7 +52,7 @@ spec:
               name: {{ .name }}-db-secret
               key: DATABASE
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 20
 
 {{- end }}
 {{- end }}

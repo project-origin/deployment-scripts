@@ -2,6 +2,7 @@ trigger:
   branches:
     include:
     - master
+    - test
     - develop
 
 # no PR triggers
@@ -12,6 +13,10 @@ resources:
 
 variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+    kubeCon: 'kubecon-eloprindelse-prod'
+    namespace: 'eloprindelse'
+    secure-file-name: 'prod.values.yaml'
+  ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
     kube-con: 'test-kube-con'
     namespace: 'test-project-origin'
     secure-file-name: 'test.values.yaml'
@@ -20,22 +25,29 @@ variables:
     namespace: 'dev-project-origin'
     secure-file-name: 'dev.values.yaml'
 
-steps:
-  - task: DownloadSecureFile@1
-    name: overrideFile
-    inputs:
-      secureFile: $(secure-file-name)
+jobs:  
+  - job: docker_build_push
+    pool:
+      ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+        name: eloprindelse-prod
+      ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
+        vmImage: 'ubuntu-latest'
+    steps:
+      - task: DownloadSecureFile@1
+        name: overrideFile
+        inputs:
+          secureFile: $(secure-file-name)
 
-  - task: HelmDeploy@0
-    displayName: Helm upgrade
-    inputs:
-      connectionType: 'Kubernetes Service Connection'
-      kubernetesServiceConnection: $(kube-con)
-      namespace: $(namespace)
-      command: upgrade
-      chartType: filepath
-      chartPath: ./chart
-      releaseName: base-setup
-      valueFile: $(overrideFile.secureFilePath)
-      install: true
-      waitForExecution: true
+      - task: HelmDeploy@0
+        displayName: Helm upgrade
+        inputs:
+          connectionType: 'Kubernetes Service Connection'
+          kubernetesServiceConnection: $(kube-con)
+          namespace: $(namespace)
+          command: upgrade
+          chartType: filepath
+          chartPath: ./chart
+          releaseName: base-setup
+          valueFile: $(overrideFile.secureFilePath)
+          install: true
+          waitForExecution: true
