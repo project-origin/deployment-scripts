@@ -15,15 +15,15 @@ variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     kubeCon: 'kubecon-eloprindelse-prod'
     namespace: 'eloprindelse'
-    secure-file-name: 'prod.values.yaml'
+    secureFileName: 'prod.values.yaml'
   ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
-    kube-con: 'test-kube-con'
+    kubeCon: 'test-kube-con'
     namespace: 'test-project-origin'
-    secure-file-name: 'test.values.yaml'
+    secureFileName: 'test.values.yaml'
   ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
-    kube-con: 'dev-kube-con'
+    kubeCon: 'dev-kube-con'
     namespace: 'dev-project-origin'
-    secure-file-name: 'dev.values.yaml'
+    secureFileName: 'dev.values.yaml'
 
 jobs:  
   - job: docker_build_push
@@ -36,13 +36,13 @@ jobs:
       - task: DownloadSecureFile@1
         name: overrideFile
         inputs:
-          secureFile: $(secure-file-name)
+          secureFile: $(secureFileName)
 
       - task: HelmDeploy@0
         displayName: Helm upgrade
         inputs:
           connectionType: 'Kubernetes Service Connection'
-          kubernetesServiceConnection: $(kube-con)
+          kubernetesServiceConnection: $(kubeCon)
           namespace: $(namespace)
           command: upgrade
           chartType: filepath
