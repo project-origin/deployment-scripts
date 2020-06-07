@@ -25,11 +25,10 @@ variables:
     namespace: 'dev-project-origin'
     secure-file-name: 'dev.values.yaml'
 
-${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-  pool: 
+pool: 
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     name: eloprindelse-prod
-${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
-  pool:
+  ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
     vmImage: 'ubuntu-latest'
 
 steps:
