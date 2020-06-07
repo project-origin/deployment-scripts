@@ -25,28 +25,29 @@ variables:
     namespace: 'dev-project-origin'
     secure-file-name: 'dev.values.yaml'
 
-pool: 
-  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-    name: eloprindelse-prod
-  ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
-    vmImage: 'ubuntu-latest'
+jobs:  
+  - job: docker_build_push
+    pool:
+      ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+        name: eloprindelse-prod
+      ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
+        vmImage: 'ubuntu-latest'
+    steps:
+      - task: DownloadSecureFile@1
+        name: overrideFile
+        inputs:
+          secureFile: $(secure-file-name)
 
-steps:
-  - task: DownloadSecureFile@1
-    name: overrideFile
-    inputs:
-      secureFile: $(secure-file-name)
-
-  - task: HelmDeploy@0
-    displayName: Helm upgrade
-    inputs:
-      connectionType: 'Kubernetes Service Connection'
-      kubernetesServiceConnection: $(kube-con)
-      namespace: $(namespace)
-      command: upgrade
-      chartType: filepath
-      chartPath: ./chart
-      releaseName: base-setup
-      valueFile: $(overrideFile.secureFilePath)
-      install: true
-      waitForExecution: true
+      - task: HelmDeploy@0
+        displayName: Helm upgrade
+        inputs:
+          connectionType: 'Kubernetes Service Connection'
+          kubernetesServiceConnection: $(kube-con)
+          namespace: $(namespace)
+          command: upgrade
+          chartType: filepath
+          chartPath: ./chart
+          releaseName: base-setup
+          valueFile: $(overrideFile.secureFilePath)
+          install: true
+          waitForExecution: true
