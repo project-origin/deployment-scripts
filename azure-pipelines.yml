@@ -2,6 +2,7 @@ trigger:
   branches:
     include:
     - master
+    - test
     - develop
 
 # no PR triggers
@@ -12,6 +13,10 @@ resources:
 
 variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+    kubeCon: 'kubecon-eloprindelse-prod'
+    namespace: 'eloprindelse'
+    secure-file-name: 'prod.values.yaml'
+  ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
     kube-con: 'test-kube-con'
     namespace: 'test-project-origin'
     secure-file-name: 'test.values.yaml'
@@ -19,6 +24,13 @@ variables:
     kube-con: 'dev-kube-con'
     namespace: 'dev-project-origin'
     secure-file-name: 'dev.values.yaml'
+
+${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+  pool: 
+    name: eloprindelse-prod
+${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
+  pool:
+    vmImage: 'ubuntu-latest'
 
 steps:
   - task: DownloadSecureFile@1
