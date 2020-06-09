@@ -17,8 +17,7 @@ spec:
           - bash
           - -c
         args:
-          - sleep 45 &&
-            psql
+          - psql
             postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres-service:5432/
             --command 
             "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
