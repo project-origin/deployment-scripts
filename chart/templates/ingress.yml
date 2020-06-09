@@ -25,13 +25,6 @@ spec:
 {{- end }}
 {{- end }}
 
-{{- if .Values.loadBalancer }}
-  controller:
-    service:
-      loadBalancerIP: {{ .Values.loadBalancer }}
-      annotations:
-        service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-{{- end }}
 
   rules:
   {{- range .Values.services }}
@@ -45,3 +38,13 @@ spec:
           servicePort: 80
   {{- end }}
   {{- end }}
+
+---
+  
+{{- if .Values.loadBalancer }}
+controller:
+  service:
+    loadBalancerIP: {{ .Values.loadBalancer }}
+    annotations:
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+{{- end }}
