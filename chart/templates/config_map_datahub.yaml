@@ -21,9 +21,12 @@ data:
   ELOVERBLIK_THIRD_PARTY_ID: '{{ .Values.eloverblik.thirdpartyid }}'
   ELOVERBLIK_SERVICE_URL: '{{ .Values.eloverblik.service }}'
   ELOVERBLIK_ONBOARDING_URL: '{{ .Values.eloverblik.onboarding }}'
-  ELOVERBLIK_REQUEST_ACCESS_FROM: '2020-04-01'
-  ELOVERBLIK_REQUEST_ACCESS_TO: '2020-12-31'
+  ELOVERBLIK_REQUEST_ACCESS_FROM: '{{ .Values.eloverblik.request_access_from }}'
+  ELOVERBLIK_REQUEST_ACCESS_TO: '{{ .Values.eloverblik.request_access_to }}'
 {{- if .Values.first_measurement_time }}
   FIRST_MEASUREMENT_TIME: '{{ .Values.first_measurement_time }}'
+{{- end }}
+{{- if .Values.last_measurement_time }}
+  LAST_MEASUREMENT_TIME: '{{ .Values.last_measurement_time }}'
 {{- end }}
 
