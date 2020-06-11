@@ -2,8 +2,8 @@
 
 protocol: https
 tls:
-  issuer: letsencrypt-staging
-  secret: eloprindelse-tls-cert
+    secret: 
+    issuer: 
 
 domain: dev.eloprindelse.dk
 debug: 1
@@ -25,7 +25,8 @@ eloverblik:
   request_access_to: '2020-12-31'
 
 postgres:
-  prefix: dev
+  username_postfix: ''
+  properties: '?sslmode=disable'
 
 services:
 

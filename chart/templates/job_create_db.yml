@@ -18,19 +18,31 @@ spec:
           - -c
         args:
           - psql
-            postgres://$(MASTER_USER):$(MASTER_PASSWORD)@postgres-service:5432/
             --command 
-            "CREATE USER $(NEW_USER) WITH PASSWORD '$(NEW_PASS)';"
+            "DROP DATABASE ${NEW_DB};"
+            --command 
+            "DROP USER ${NEW_USER};"
+            --command 
+            "CREATE USER ${NEW_USER} WITH PASSWORD '${NEW_PASS}';"
+            --command 
+            "GRANT ${NEW_USER} TO $(echo ${PGUSER} | cut -f1 -d@);"
             --command
-            "CREATE DATABASE $(NEW_TABLE) OWNER $(NEW_USER);"
-
+            "CREATE DATABASE ${NEW_DB} OWNER ${NEW_USER};"
+            --command
+            "REVOKE ${NEW_USER} FROM $(echo $PGUSER | cut -f1 -d@);"
         env:
-        - name: MASTER_USER
+        - name: PGHOST
+          value: 'postgres-service'
+        - name: PGPORT 
+          value: '5432' 
+        - name: PGDATABASE
+          value: 'postgres'
+        - name: PGUSER
           valueFrom:
             secretKeyRef:
               name: postgres-master-secret
               key: USERNAME
-        - name: MASTER_PASSWORD
+        - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
               name: postgres-master-secret
@@ -45,7 +57,7 @@ spec:
             secretKeyRef:
               name: {{ .name }}-db-secret
               key: PASSWORD
-        - name: NEW_TABLE
+        - name: NEW_DB
           valueFrom:
             secretKeyRef:
               name: {{ .name }}-db-secret
