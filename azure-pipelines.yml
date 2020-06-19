@@ -13,8 +13,8 @@ resources:
 
 variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-    kubeCon: 'kubecon-eloprindelse-prod'
-    namespace: 'cs03-project-origin-p-01'
+    kubeCon: 'prod-kube-con'
+    namespace: 'project-origin'
     secureFileName: 'prod.values.yaml'
   ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
     kubeCon: 'test-kube-con'
@@ -28,7 +28,11 @@ variables:
 jobs:  
   - job: docker_build_push
     pool:
-      vmImage: 'ubuntu-latest'
+      ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+        name: eloprindelse-prod
+      ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
+        vmImage: 'ubuntu-latest'
+        
     steps:
       - task: DownloadSecureFile@1
         name: overrideFile
