@@ -41,6 +41,9 @@ spec:
     http:
       paths:
         - path: /
+          backend:
+            serviceName: example-frontend-service
+            servicePort: 80
 {{- end }}
   {{- range .Values.services }}
   {{- if .ingress }}
