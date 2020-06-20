@@ -36,6 +36,9 @@ spec:
 
 
   rules:
+{{- if $root.Values.redirect_domain_to }}
+  - host: {{ $root.Values.domain }}
+{{- end }}
   {{- range .Values.services }}
   {{- if .ingress }}
   - host: {{ .ingress.subdomain }}.{{ $root.Values.domain }}
