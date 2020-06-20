@@ -24,6 +24,9 @@ spec:
   tls:
     - secretName: {{ .Values.tls.secret }}
       hosts:
+{{- if $root.Values.redirect_domain_to }}
+        - {{ $root.Values.domain }}
+{{- end }}
 {{- range .Values.services }}
 {{- if .ingress }}
         - {{ .ingress.subdomain }}.{{ $root.Values.domain }}
