@@ -9,9 +9,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     {{- if $root.Values.redirect_domain_to }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      if ($host = ^{{ $root.Values.domain }}$) {
-        return 301 {{ $root.Values.protocol }}://{{ $root.Values.redirect_domain_to }};
-      }
+      return 301 {{ $root.Values.protocol }}://{{ $root.Values.redirect_domain_to }};
     {{- end }}
 
     {{- if .Values.tls.issuer }}
