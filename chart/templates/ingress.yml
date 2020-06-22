@@ -7,6 +7,12 @@ metadata:
   name: po-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
+    {{- if $root.Values.redirect_domain_to }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($host = '{{ $root.Values.domain }}') {
+        return 301 {{ $root.Values.redirect_domain_to }};
+      }
+    {{- end }}
 
     {{- if .Values.tls.issuer }}
     kubernetes.io/tls-acme: "true"
@@ -18,6 +24,9 @@ spec:
   tls:
     - secretName: {{ .Values.tls.secret }}
       hosts:
+{{- if $root.Values.redirect_domain_to }}
+        - {{ $root.Values.domain }}
+{{- end }}
 {{- range .Values.services }}
 {{- if .ingress }}
         - {{ .ingress.subdomain }}.{{ $root.Values.domain }}
@@ -27,6 +36,15 @@ spec:
 
 
   rules:
+  {{- if $root.Values.redirect_domain_to }}
+  - host: {{ $root.Values.domain }}
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: example-frontend-service
+            servicePort: 80
+  {{- end }}
   {{- range .Values.services }}
   {{- if .ingress }}
   - host: {{ .ingress.subdomain }}.{{ $root.Values.domain }}
