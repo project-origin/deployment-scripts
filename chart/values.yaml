@@ -6,7 +6,7 @@ tls:
     issuer: 
 
 domain: dev.eloprindelse.dk
-redirect_domain_to: app.dev.eloprindelse.dk
+redirect_domain_to: https://app.dev.eloprindelse.dk
 debug: 1
 
 email:
