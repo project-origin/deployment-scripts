@@ -37,13 +37,13 @@ spec:
 
   rules:
   {{- if $root.Values.redirect_domain_to }}
-    - host: {{ $root.Values.domain }}
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: example-frontend-service
-              servicePort: 80
+  - host: {{ $root.Values.domain }}
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: example-frontend-service
+            servicePort: 80
   {{- end }}
   {{- range .Values.services }}
   {{- if .ingress }}
