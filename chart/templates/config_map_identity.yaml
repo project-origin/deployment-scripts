@@ -5,6 +5,7 @@ metadata:
 data:
   DATABASE_CONN_POLL_SIZE: '3'
   TOKEN_EXPIRE_MINUTES: '4320'
+  CONSENT_EXPIRE_MINUTES: '525600'
   PROJECT_URL: '{{ .Values.protocol }}://{{ .Values.services.identity.ingress.subdomain }}.{{ .Values.domain }}'
   HYDRA_URL: 'http://{{ .Values.services.hydra.name }}-service:4445'
   FAILURE_REDIRECT_URL: '{{ .Values.protocol }}://{{ .Values.services.example_frontend.ingress.subdomain }}.{{ .Values.domain }}'
