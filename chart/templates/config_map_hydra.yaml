@@ -13,4 +13,3 @@ data:
   TTL_ACCESS_TOKEN: '72h'
   TTL_ID_TOKEN: '72h'
   LOG_LEVEL: 'debug'
-  LOG_LEAK_SENSITIVE_VALUES: 'true'
