@@ -38,6 +38,7 @@ services:
     ingress: 
       subdomain: account
     database: true
+    grafana_read: true
     flask_secret: true
     webhook_secret: true
     hydra_client:
@@ -53,6 +54,7 @@ services:
     ingress: 
       subdomain: datahub
     database: true
+    grafana_read: true
     flask_secret: true
     ports:
       - name: 'http'
@@ -71,6 +73,7 @@ services:
     ingress: 
       subdomain: api.app
     database: true
+    grafana_read: true
     flask_secret: true
     webhook_secret: true
     hydra_client:
@@ -95,6 +98,7 @@ services:
     ingress: 
       subdomain: identity
     database: true
+    grafana_read: true
     flask_secret: true
     ports:
       - name: 'http'
