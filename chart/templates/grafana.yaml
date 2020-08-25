@@ -89,11 +89,11 @@ spec:
               \ndatasources:
               {{- range .Values.services }}
               {{- if .grafana_read }} 
-              \n  - name: {{ .name }}_service_db
+              \n  - name: {{ .name | replace '-' '_' }}_service_db
               \n    type: postgres
               \n    postgresVersion: 906
               \n    url: postgres-service
-              \n    database: {{ .name }}_service_db
+              \n    database: {{ .name | replace '-' '_' }}_service_db
               \n    user: grafana_readonly_user
               \n    jsonData:
               \n      maxOpenConns: 1
