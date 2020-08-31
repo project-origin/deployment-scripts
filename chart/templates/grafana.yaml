@@ -81,19 +81,19 @@ spec:
           args:
             - "echo 'apiVersion: 1
               \ndeleteDatasources:
-              {{- range .Values.services }}
+              {{- range $key, $val := .Values.services }}
               {{- if .grafana_read }} 
-              \n  - name: {{ .name }}_service_db
+              \n  - name: {{ $key }}_service_db
               {{- end }}
               {{- end }}
               \ndatasources:
-              {{- range .Values.services }}
+              {{- range $key, $val := .Values.services }}
               {{- if .grafana_read }} 
-              \n  - name: {{ .name | replace '-' '_' }}_service_db
+              \n  - name: {{ $key }}_service_db
               \n    type: postgres
               \n    postgresVersion: 906
               \n    url: postgres-service
-              \n    database: {{ .name | replace '-' '_' }}_service_db
+              \n    database: {{ $key }}_service_db
               \n    user: grafana_readonly_user
               \n    jsonData:
               \n      maxOpenConns: 1
