@@ -6,7 +6,7 @@ parameters:
 trigger: none
 
 variables:
-  - group: ${{ parameters.branchName }}
+- group: dev
 
 jobs:  
   - job: docker_build_push
