@@ -2,6 +2,7 @@ trigger:
   branches:
     include:
     - master
+    - feature-devops
     - test
     - develop
 
@@ -12,18 +13,7 @@ resources:
 - repo: self
 
 variables:
-  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-    kubeCon: 'prod-kube-con'
-    namespace: 'project-origin'
-    secureFileName: 'prod.values.yaml'
-  ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
-    kubeCon: 'test-kube-con'
-    namespace: 'test-project-origin'
-    secureFileName: 'test.values.yaml'
-  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
-    kubeCon: 'dev-kube-con'
-    namespace: 'dev-project-origin'
-    secureFileName: 'dev.values.yaml'
+  - group: $(Build.SourceBranchName)
 
 jobs:  
   - job: docker_build_push
