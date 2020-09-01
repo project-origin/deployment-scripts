@@ -13,7 +13,7 @@ resources:
 - repo: self
 
 variables:
-  - group: $(Build.SourceBranchName)
+  - group: ${{ $(Build.SourceBranchName) }}
 
 jobs:  
   - job: docker_build_push
