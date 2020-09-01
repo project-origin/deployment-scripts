@@ -12,33 +12,7 @@ pr: none
 resources:
 - repo: self
 
-variables:
-  - group: $(Build.SourceBranchName)
-
-jobs:  
-  - job: docker_build_push
-    pool:
-      ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-        name: eloprindelse-prod
-      ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
-        vmImage: 'ubuntu-latest'
-        
-    steps:
-      - task: DownloadSecureFile@1
-        name: overrideFile
-        inputs:
-          secureFile: $(secureFileName)
-
-      - task: HelmDeploy@0
-        displayName: Helm upgrade
-        inputs:
-          connectionType: 'Kubernetes Service Connection'
-          kubernetesServiceConnection: $(kubeCon)
-          namespace: $(namespace)
-          command: upgrade
-          chartType: filepath
-          chartPath: ./chart
-          releaseName: base-setup
-          valueFile: $(overrideFile.secureFilePath)
-          install: true
-          waitForExecution: true
+extends:
+  template: simple-param.yml
+  parameters:
+      branchName: $(Build.SourceBranchName)
