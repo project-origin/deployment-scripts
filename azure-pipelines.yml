@@ -36,7 +36,7 @@ jobs:
               displayName: Helm upgrade
               inputs:
                 connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceConnection: $(kubeCon)
+                kubernetesServiceConnection: 'feature-devops-kube-con'
                 namespace: $(namespace)
                 command: upgrade
                 chartType: filepath
