@@ -13,11 +13,11 @@ resources:
 
 variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-    - group: 'production'
+  - group: 'production'
   ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
-    - group: 'preprod'
+  - group: 'preprod'
   ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
-    - group: 'develop'
+  - group: 'develop'
 
 
 jobs:  
