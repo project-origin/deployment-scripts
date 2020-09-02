@@ -16,7 +16,8 @@ variables:
 - group: 'feature-devops'
 
 jobs:  
-  - deployment: docker_build_push
+  - deployment: helm_install
+    displayName: install base setup
     pool:
       vmImage: 'ubuntu-latest'
         
@@ -36,7 +37,7 @@ jobs:
               displayName: Helm upgrade
               inputs:
                 connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceConnection: 'feature-devops-kube-con'
+                kubernetesServiceConnection: $(kubeCon)
                 namespace: $(namespace)
                 command: upgrade
                 chartType: filepath
