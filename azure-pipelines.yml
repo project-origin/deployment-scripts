@@ -30,7 +30,7 @@ jobs:
               name: overrideFile
               inputs:
                 secureFile: $(secureFileName)
-
+                
         deploy:
           steps:
             - task: HelmDeploy@0
@@ -41,7 +41,7 @@ jobs:
                 namespace: $(namespace)
                 command: upgrade
                 chartType: filepath
-                chartPath: ./chart
+                chartPath: $(Pipeline.Workspace)/chart
                 releaseName: base-setup
                 valueFile: $(overrideFile.secureFilePath)
                 install: true
