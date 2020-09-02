@@ -2,7 +2,6 @@ trigger:
   branches:
     include:
     - master
-    - feature-devops
     - test
     - develop
 
@@ -13,7 +12,13 @@ resources:
 - repo: self
 
 variables:
-- group: 'feature-devops'
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+    - group: 'production'
+  ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
+    - group: 'preprod'
+  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
+    - group: 'develop'
+
 
 jobs:  
   - deployment: helm_install
