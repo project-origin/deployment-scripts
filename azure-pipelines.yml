@@ -12,7 +12,36 @@ pr: none
 resources:
 - repo: self
 
-extends:
-  template: simple-param.yml
-  parameters:
-      branchName: $(Build.SourceBranchName)
+variables:
+- group: 'feature-devops'
+
+jobs:  
+  - deployment: docker_build_push
+    pool:
+      vmImage: 'ubuntu-latest'
+        
+    environment: $(deploymentEnvironment)
+    strategy:
+      runOnce:
+        preDeploy:
+          steps:
+            - task: DownloadSecureFile@1
+              name: overrideFile
+              inputs:
+                secureFile: $(secureFileName)
+
+        deploy:
+          steps:
+            - task: HelmDeploy@0
+              displayName: Helm upgrade
+              inputs:
+                connectionType: 'Kubernetes Service Connection'
+                kubernetesServiceConnection: $(kubeCon)
+                namespace: $(namespace)
+                command: upgrade
+                chartType: filepath
+                chartPath: ./chart
+                releaseName: base-setup
+                valueFile: $(overrideFile.secureFilePath)
+                install: true
+                waitForExecution: true
