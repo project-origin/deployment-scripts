@@ -16,33 +16,30 @@ variables:
 - group: 'feature-devops'
 
 jobs:  
-  - deployment: helm_install
+  - job: helm_install
     displayName: install base setup
     pool:
       vmImage: 'ubuntu-latest'
         
-    environment: $(deploymentEnvironment)
-    strategy:
-      runOnce:
-        preDeploy:
-          steps:
-            - task: DownloadSecureFile@1
-              name: overrideFile
-              inputs:
-                secureFile: $(secureFileName)
-                
-        deploy:
-          steps:
-            - task: HelmDeploy@0
-              displayName: Helm upgrade
-              inputs:
-                connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceConnection: $(kubeCon)
-                namespace: $(namespace)
-                command: upgrade
-                chartType: filepath
-                chartPath: $(Pipeline.Workspace)/chart
-                releaseName: base-setup
-                valueFile: $(overrideFile.secureFilePath)
-                install: true
-                waitForExecution: true
+    # environment: $(deploymentEnvironment)
+    # strategy:
+    #   runOnce:
+    #     deploy:
+    steps:
+      - task: DownloadSecureFile@1
+        name: overrideFile
+        inputs:
+          secureFile: $(secureFileName)
+      - task: HelmDeploy@0
+        displayName: Helm upgrade
+        inputs:
+          connectionType: 'Kubernetes Service Connection'
+          kubernetesServiceConnection: $(kubeCon)
+          namespace: $(namespace)
+          command: upgrade
+          chartType: filepath
+          chartPath: ./chart
+          releaseName: base-setup
+          valueFile: $(overrideFile.secureFilePath)
+          install: true
+          waitForExecution: true
