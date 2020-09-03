@@ -16,7 +16,7 @@ resources:
 
 variables:
   - name: releaseName
-    value: 'account-service'
+    value: 'base-setup'
   - name: imageName
     value: 'projectorigin/$(releaseName)'
   - template: vars.yml@templates
