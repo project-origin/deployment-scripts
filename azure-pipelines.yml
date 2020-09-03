@@ -31,7 +31,7 @@ jobs:
       namespace: $(namespace)
       releaseName: $(releaseName)
       deploymentEnvironment: $(deploymentEnvironment)
-      valueFile: $(overrideFile.secureFilePath)
+      secureFileName: $(secureFileName)
       pool:
         ${{ if ne(variables['poolName'], '') }}:
           name: $(poolName)
