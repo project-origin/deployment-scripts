@@ -43,12 +43,13 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: postgres-container
-          image: postgres:9.6
+          image: postgres:11.9
           ports:
             - containerPort: 5432
           volumeMounts:
             - name: postgres-data
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgresql/data
+              subPath: data
           env:
             - name: POSTGRES_USER
               valueFrom:
