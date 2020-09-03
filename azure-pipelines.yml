@@ -1,54 +1,39 @@
 trigger:
-  branches:
-    include:
-    - master
-    - test
-    - develop
+  - master
+  - preprod
+  - test
+  - develop
 
-# no PR triggers
 pr: none
 
 resources:
-- repo: self
+  repositories:
+    - repository: self
+    - repository: templates
+      type: github
+      endpoint: project-origin
+      name: project-origin/pipeline-templates
 
 variables:
-- ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-  - group: 'production'
-- ${{ if eq(variables['Build.SourceBranchName'], 'test') }}:
-  - group: 'preprod'
-- ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
-  - group: 'develop'
+  - name: releaseName
+    value: 'account-service'
+  - name: imageName
+    value: 'projectorigin/$(releaseName)'
+  - template: vars.yml@templates
 
+pool:
+  vmImage: 'ubuntu-latest'
 
-jobs:  
-  - deployment: helm_install
-    displayName: install base setup
-    pool:
-      vmImage: 'ubuntu-latest'
-        
-    environment: $(deploymentEnvironment)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-            - checkout: self
-              displayName: Download source
-
-            - task: DownloadSecureFile@1
-              name: overrideFile
-              inputs:
-                secureFile: $(secureFileName)
-                
-            - task: HelmDeploy@0
-              displayName: Helm upgrade
-              inputs:
-                connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceConnection: $(kubeCon)
-                namespace: $(namespace)
-                command: upgrade
-                chartType: filepath
-                chartPath: ./chart
-                releaseName: base-setup
-                valueFile: $(overrideFile.secureFilePath)
-                install: true
-                waitForExecution: true
+jobs:
+  - template: job-deploy.yml@templates
+    parameters:
+      kubeCon: $(kubeCon)
+      namespace: $(namespace)
+      releaseName: $(releaseName)
+      deploymentEnvironment: $(deploymentEnvironment)
+      valueFile: $(overrideFile.secureFilePath)
+      pool:
+        ${{ if ne(variables['poolName'], '') }}:
+          name: $(poolName)
+        ${{ if eq(variables['poolName'], '') }}:
+          vmImage: 'ubuntu-latest'
