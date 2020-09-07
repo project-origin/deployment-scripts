@@ -97,7 +97,7 @@ spec:
               \n    user: grafana_readonly_user
               \n    jsonData:
               \n      maxOpenConns: 1
-              \n      sslmode: disable
+              \n      sslmode: verify-full
               \n    secureJsonData:
               \n      password: world
               {{- end }}
