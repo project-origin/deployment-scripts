@@ -25,6 +25,12 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
+  - job: testOutput
+    steps:
+      - script: |
+          echo $(poolName)
+      - script: |
+          echo ${{ variables['poolName'] }}
   - template: job-deploy.yml@templates
     parameters:
       kubeCon: $(kubeCon)
