@@ -24,16 +24,28 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
-jobs:
-  - template: job-deploy.yml@templates
-    parameters:
-      kubeCon: $(kubeCon)
-      namespace: $(namespace)
-      releaseName: $(releaseName)
-      deploymentEnvironment: $(deploymentEnvironment)
-      secureFileName: $(secureFileName)
-      pool:
-        $[ if nq(variables['poolName'], '') ]:
+stages:
+- stage: deploy_poolName
+  condition: nq($(poolName), '')
+  jobs:
+    - template: job-deploy.yml@templates
+      parameters:
+        kubeCon: $(kubeCon)
+        namespace: $(namespace)
+        releaseName: $(releaseName)
+        deploymentEnvironment: $(deploymentEnvironment)
+        secureFileName: $(secureFileName)
+        pool:
           name: $(poolName)
-        $[ if eq(variables['poolName'], '') ]:
+- stage: deploy_no_poolName
+  condition: eq($(poolName), '')
+  jobs:
+    - template: job-deploy.yml@templates
+      parameters:
+        kubeCon: $(kubeCon)
+        namespace: $(namespace)
+        releaseName: $(releaseName)
+        deploymentEnvironment: $(deploymentEnvironment)
+        secureFileName: $(secureFileName)
+        pool:
           vmImage: 'ubuntu-latest'
