@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: namespace-config
 data:
+  DOMAIN: {{ .Values.domain | quote }}
   DEBUG: {{ .Values.debug | quote }}
   {{- if .Values.instrumentation_key}}
   AZURE_APP_INSIGHTS_CONN_STRING: {{ .Values.instrumentation_key | quote }}
