@@ -25,12 +25,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-  - job: testOutput
-    steps:
-      - script: |
-          echo $(poolName)
-      - script: |
-          echo ${{ variables['poolName'] }}
   - template: job-deploy.yml@templates
     parameters:
       kubeCon: $(kubeCon)
@@ -39,7 +33,7 @@ jobs:
       deploymentEnvironment: $(deploymentEnvironment)
       secureFileName: $(secureFileName)
       pool:
-        ${{ if ne(variables['poolName'], '') }}:
+        $[ if nq(variables['poolName'], '') ]:
           name: $(poolName)
-        ${{ if eq(variables['poolName'], '') }}:
+        $[ if eq(variables['poolName'], '') ]:
           vmImage: 'ubuntu-latest'
