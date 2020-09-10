@@ -24,6 +24,7 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
+
 jobs:
   - template: job-deploy.yml@templates
     parameters:
@@ -33,7 +34,7 @@ jobs:
       deploymentEnvironment: $(deploymentEnvironment)
       secureFileName: $(secureFileName)
       pool:
-        ${{ if ne(variables['poolName'], '') }}:
+        ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           name: $(poolName)
-        ${{ if eq(variables['poolName'], '') }}:
+        ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
           vmImage: 'ubuntu-latest'

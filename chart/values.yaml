@@ -12,7 +12,7 @@ debug: 1
 email:
     sendgrid_key: _
     support: _
-    sender_address: noreploy@eloprindelse.dk
+    sender_address: noreply@eloprindelse.dk
     sender_name: Eloprindelse
     
 # An AppInsights instrumentation key can be added.
@@ -131,6 +131,7 @@ services:
     ingress: 
       subdomain: grafana
     database: true
+    sslmode: 'require' # 'disable'
     ports:
       - name: 'http'
         port: 80

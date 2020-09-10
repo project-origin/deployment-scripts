@@ -5,4 +5,4 @@ metadata:
 data:
   GF_DEFAULT_INSTANCE_NAME: '{{ .Values.protocol }}://{{ .Values.services.grafana.ingress.subdomain }}.{{ .Values.domain }}/'
   GF_DATABASE_TYPE: 'postgres'
-  GF_DATABASE_SSL_MODE: 'disable'
+  GF_DATABASE_SSL_MODE: {{ .Values.services.grafana.sslmode | quote }} 
