@@ -1,7 +1,7 @@
 {{ $root := . -}}
 ---
 
-{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace grafana-admin-secret)}}
+{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace "grafana-admin-secret") }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -19,7 +19,7 @@ data:
 
 ---
 
-{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace grafana-readonly-secret)}}
+{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace "grafana-admin-secret") }}
 apiVersion: v1
 kind: Secret
 metadata:
