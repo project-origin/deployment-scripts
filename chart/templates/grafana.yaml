@@ -8,7 +8,7 @@ metadata:
   name: grafana-admin-secret
 type: Opaque
 data:
-  USERNAME: {{ admin | b64enc }}
+  USERNAME: {{ "admin" | b64enc }}
 {{- if $secret }}
   {{ $password := printf "%s" $secret.data.PASSWORD | b64dec }}
   PASSWORD: {{ $password | b64enc }}
@@ -26,7 +26,7 @@ metadata:
   name: grafana-readonly-secret
 type: Opaque
 data:
-  USERNAME: {{ grafana_readonly_user | b64enc }}
+  USERNAME: {{ "grafana_readonly_user" | b64enc }}
 {{- if $secret }}
   {{ $password := printf "%s" $secret.data.PASSWORD | b64dec }}
   PASSWORD: {{ $password | b64enc }}
