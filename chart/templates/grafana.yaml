@@ -55,9 +55,9 @@ spec:
             args:
               - psql
                 --command 
-                "DROP USER IF EXISTS ${READONLY_USERNAME};"
-                --command 
                 "CREATE USER ${READONLY_USERNAME} WITH PASSWORD '${READONLY_PASSWORD}';"
+                --command 
+                "ALTER USER ${READONLY_USERNAME} WITH PASSWORD '${READONLY_PASSWORD}';"
               {{- range .Values.services }}
               {{- if .grafana_read }}
               {{- $DB := printf "%s_service_db" .name | replace "-" "_" }}
@@ -133,13 +133,13 @@ spec:
               {{- if .grafana_read }} 
               \n  - name: {{ $key }}_service_db
               \n    type: postgres
-              \n    postgresVersion: 906
+              \n    postgresVersion: 1100
               \n    url: postgres-service
               \n    database: {{ $key }}_service_db
               \n    user: ${READONLY_USERNAME}
               \n    jsonData:
               \n      maxOpenConns: 1
-              \n      sslmode: disable
+              \n      sslmode: {{ $root.Values.services.grafana.sslmode }}
               \n    secureJsonData:
               \n      password: ${READONLY_PASSWORD}
               {{- end }}
