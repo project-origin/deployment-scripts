@@ -1,6 +1,7 @@
-{{- $root := . -}}
-{{- $secret := (lookup "v1" "Secret" $root.Release.Namespace grafana-admin-secret) -}}
+{{ $root := . -}}
 ---
+
+{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace grafana-admin-secret)}}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -15,8 +16,10 @@ data:
   {{ $password := randAlphaNum 20 }}
   PASSWORD: {{ $password | b64enc }}
 {{- end }}
-{{- $secret := (lookup "v1" "Secret" $root.Release.Namespace grafana-readonly-secret) -}}
+
 ---
+
+{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace grafana-readonly-secret)}}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -31,6 +34,7 @@ data:
   {{ $password := randAlphaNum 20 }}
   PASSWORD: {{ $password | b64enc }}
 {{- end }}
+
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
