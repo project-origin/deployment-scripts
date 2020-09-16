@@ -10,8 +10,7 @@ type: Opaque
 data:
   USERNAME: {{ "admin" | b64enc }}
 {{- if $secret }}
-  {{ $password := printf "%s" $secret.data.PASSWORD | b64dec }}
-  PASSWORD: {{ $password | b64enc }}
+  PASSWORD: {{ $secret.data.PASSWORD }}
 {{- else}}
   {{ $password := randAlphaNum 20 }}
   PASSWORD: {{ $password | b64enc }}
@@ -19,7 +18,7 @@ data:
 
 ---
 
-{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace "grafana-admin-secret") }}
+{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace "grafana-readonly-secret") }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -28,8 +27,7 @@ type: Opaque
 data:
   USERNAME: {{ "grafana_readonly_user" | b64enc }}
 {{- if $secret }}
-  {{ $password := printf "%s" $secret.data.PASSWORD | b64dec }}
-  PASSWORD: {{ $password | b64enc }}
+  PASSWORD: {{ $secret.data.PASSWORD }}
 {{- else}}
   {{ $password := randAlphaNum 20 }}
   PASSWORD: {{ $password | b64enc }}
