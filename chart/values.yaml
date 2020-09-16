@@ -131,7 +131,7 @@ services:
     ingress: 
       subdomain: grafana
     database: true
-    sslmode: 'require' # 'disable'
+    sslmode: 'require'
     ports:
       - name: 'http'
         port: 80
