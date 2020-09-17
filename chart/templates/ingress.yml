@@ -10,7 +10,7 @@ metadata:
     {{- if $root.Values.redirect_domain_to }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       if ($host = '{{ $root.Values.domain }}') {
-        return 301 {{ $root.Values.redirect_domain_to }};
+        return 307 {{ $root.Values.redirect_domain_to }};
       }
     {{- end }}
 
