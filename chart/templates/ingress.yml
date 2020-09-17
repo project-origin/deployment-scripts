@@ -22,9 +22,15 @@ spec:
 
 {{- if .Values.tls.secret }}
   tls:
+{{- if and ($root.Values.redirect_domain_to) (ne .Values.root_secret nil)}}
+    - secretName: {{ .Values.root_secret }}
+      hosts:
+        - {{ $root.Values.domain }}
+{{- end }}
+
     - secretName: {{ .Values.tls.secret }}
       hosts:
-{{- if $root.Values.redirect_domain_to }}
+{{- if and ($root.Values.redirect_domain_to) (eq .Values.root_secret nil)}}
         - {{ $root.Values.domain }}
 {{- end }}
 {{- range .Values.services }}

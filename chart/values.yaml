@@ -2,6 +2,7 @@
 
 protocol: https
 tls:
+    root_secret:
     secret: 
     issuer: 
 
@@ -71,7 +72,7 @@ services:
   example_backend:
     name: example-backend
     ingress: 
-      subdomain: api.app
+      subdomain: api-app
     database: true
     grafana_read: true
     flask_secret: true
