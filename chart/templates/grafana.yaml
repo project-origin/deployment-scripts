@@ -1,116 +1,178 @@
-# {{- $root := . -}}
-# ---
-# apiVersion: batch/v1
-# kind: Job
-# metadata:
-#   name: grafana-read-db-job
-# spec:
-#   template:
-#     spec:
-#       containers:
-#       - name: grafana-read-db-container
-#         image: postgres:9.6
-#         command:
-#           - bash
-#           - -c
-#         args:
-#           - psql
-#             --command 
-#             "DROP USER IF EXISTS ${NEW_USER};"
-#             --command 
-#             "CREATE USER ${NEW_USER} WITH PASSWORD '${NEW_PASS}';"
-#           {{- range .Values.services }}
-#           {{- if .grafana_read }}
-#           {{- $db := printf "%s_service_db" .name | replace "-" "_" }}
-#             --command
-#             "\c {{ $db }};"
-#             --command
-#             "GRANT CONNECT ON DATABASE {{ $db }} TO ${NEW_USER};"
-#             --command
-#             "GRANT USAGE ON SCHEMA public TO ${NEW_USER};"
-#             --command
-#             "GRANT SELECT ON ALL TABLES IN SCHEMA public TO ${NEW_USER};"
-#             --command
-#             "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO ${NEW_USER};"
-#           {{- end }}
-#           {{- end }}
-#         env:
-#         - name: PGHOST
-#           value: 'postgres-service'
-#         - name: PGPORT 
-#           value: '5432' 
-#         - name: PGDATABASE
-#           value: 'postgres'
-#         - name: PGUSER
-#           valueFrom:
-#             secretKeyRef:
-#               name: postgres-master-secret
-#               key: USERNAME
-#         - name: PGPASSWORD
-#           valueFrom:
-#             secretKeyRef:
-#               name: postgres-master-secret
-#               key: PASSWORD
-#         - name: NEW_USER
-#           value: 'grafana_readonly_user'
-#         - name: NEW_PASS
-#           value: 'world'
-#       restartPolicy: Never
-#   backoffLimit: 20
-# ---
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: grafana-deployment
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: grafana-deployment
-#   template:
-#     metadata:
-#       labels:
-#         app: grafana-deployment
-#     spec:
-#       containers:
-#         - name: grafana-container
-#           image: grafana/grafana:7.1.3
-#           command:
-#             - bash
-#             - -c
-#           args:
-#             - "echo 'apiVersion: 1
-#               \ndeleteDatasources:
-#               {{- range $key, $val := .Values.services }}
-#               {{- if .grafana_read }} 
-#               \n  - name: {{ $key }}_service_db
-#               {{- end }}
-#               {{- end }}
-#               \ndatasources:
-#               {{- range $key, $val := .Values.services }}
-#               {{- if .grafana_read }} 
-#               \n  - name: {{ $key }}_service_db
-#               \n    type: postgres
-#               \n    postgresVersion: 906
-#               \n    url: postgres-service
-#               \n    database: {{ $key }}_service_db
-#               \n    user: grafana_readonly_user
-#               \n    jsonData:
-#               \n      maxOpenConns: 1
-#               \n      sslmode: verify-full
-#               \n    secureJsonData:
-#               \n      password: world
-#               {{- end }}
-#               {{- end }}
-#               \n' > /etc/grafana/provisioning/datasources/ds.yaml & /run.sh"
-#           ports:
-#             - containerPort: 3000
-#           envFrom:
-#             - configMapRef:
-#                 name: grafana-config
-#           env:
-#             - name: 'GF_DATABASE_URL'
-#               valueFrom:
-#                 secretKeyRef:
-#                   name: grafana-db-secret
-#                   key: DATABASE_URI
+{{ $root := . -}}
+---
+
+{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace "grafana-admin-secret") }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-admin-secret
+type: Opaque
+data:
+  USERNAME: {{ "admin" | b64enc }}
+{{- if $secret }}
+  PASSWORD: {{ $secret.data.PASSWORD }}
+{{- else}}
+  {{ $password := randAlphaNum 20 }}
+  PASSWORD: {{ $password | b64enc }}
+{{- end }}
+
+---
+
+{{ $secret := (lookup "v1" "Secret" $root.Release.Namespace "grafana-readonly-secret") }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-readonly-secret
+type: Opaque
+data:
+  USERNAME: {{ "grafana_readonly_user" | b64enc }}
+{{- if $secret }}
+  PASSWORD: {{ $secret.data.PASSWORD }}
+{{- else}}
+  {{ $password := randAlphaNum 20 }}
+  PASSWORD: {{ $password | b64enc }}
+{{- end }}
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: grafana-read-db-job
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: grafana-read-db-container
+            image: postgres:11.9
+            command:
+              - bash
+              - -c
+            args:
+              - psql
+                --command 
+                "CREATE USER ${READONLY_USERNAME} WITH PASSWORD '${READONLY_PASSWORD}';"
+                --command 
+                "ALTER USER ${READONLY_USERNAME} WITH PASSWORD '${READONLY_PASSWORD}';"
+              {{- range .Values.services }}
+              {{- if .grafanaRead }}
+              {{- $DB := printf "%s_service_db" .name | replace "-" "_" }}
+                --command
+                "\c {{ $DB }};"
+                --command
+                "GRANT CONNECT ON DATABASE {{ $DB }} TO ${READONLY_USERNAME};"
+                --command
+                "GRANT USAGE ON SCHEMA public TO ${READONLY_USERNAME};"
+                --command
+                "GRANT SELECT ON ALL TABLES IN SCHEMA public TO ${READONLY_USERNAME};"
+              {{- end }}
+              {{- end }}
+            env:
+            - name: PGHOST
+              value: 'postgres-service'
+            - name: PGPORT
+              value: '5432'
+            - name: PGDATABASE
+              value: 'postgres'
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-master-secret
+                  key: USERNAME
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-master-secret
+                  key: PASSWORD
+            - name: READONLY_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-readonly-secret
+                  key: USERNAME
+            - name: READONLY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-readonly-secret
+                  key: PASSWORD
+          restartPolicy: OnFailure
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-deployment
+  template:
+    metadata:
+      labels:
+        app: grafana-deployment
+    spec:
+      containers:
+        - name: grafana-container
+          image: grafana/grafana:7.1.3
+          command:
+            - bash
+            - -c
+          args:
+            - "echo 'apiVersion: 1
+              \ndeleteDatasources:
+              {{- range $key, $val := .Values.services }}
+              {{- if .grafanaRead }} 
+              \n  - name: {{ $key }}_service_db
+              {{- end }}
+              {{- end }}
+              \ndatasources:
+              {{- range $key, $val := .Values.services }}
+              {{- if .grafanaRead }} 
+              \n  - name: {{ $key }}_service_db
+              \n    type: postgres
+              \n    postgresVersion: 1100
+              \n    url: postgres-service
+              \n    database: {{ $key }}_service_db
+              \n    user: ${READONLY_USERNAME}
+              \n    jsonData:
+              \n      maxOpenConns: 1
+              \n      sslmode: {{ $root.Values.services.grafana.sslmode }}
+              \n    secureJsonData:
+              \n      password: ${READONLY_PASSWORD}
+              {{- end }}
+              {{- end }}
+              \n' > /etc/grafana/provisioning/datasources/ds.yaml & /run.sh"
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: grafana-config
+          env:
+            - name: 'GF_DATABASE_URL'
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-db-secret
+                  key: DATABASE_URI
+
+            - name: 'GF_SECURITY_ADMIN_USER'
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-admin-secret
+                  key: USERNAME
+            - name: 'GF_SECURITY_ADMIN_PASSWORD'
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-admin-secret
+                  key: PASSWORD
+
+            - name: READONLY_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-readonly-secret
+                  key: USERNAME
+            - name: READONLY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-readonly-secret
+                  key: PASSWORD
