@@ -6,7 +6,9 @@ CONVERSION = sys.argv[1]
 SOURCEFILE = sys.argv[2]
 DESTINATIONFILE = sys.argv[3]
 
-if CONVERSION == 'yaml-json':
+print(CONVERSION, SOURCEFILE, DESTINATIONFILE)
+
+if CONVERSION == 'yamltojson':
     with open(SOURCEFILE, 'r') as file:
         data = yaml.load(file.read())
 
@@ -14,7 +16,7 @@ if CONVERSION == 'yaml-json':
         json.dump(data, file, indent=2)
 
 
-elif  CONVERSION == 'json-yaml':
+elif  CONVERSION == 'jsontoyaml':
     with open(SOURCEFILE, 'r') as file:
         data = json.load(file)
 
