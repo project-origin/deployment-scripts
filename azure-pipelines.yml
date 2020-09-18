@@ -38,6 +38,7 @@ jobs:
             python3 yaml_json_converter.py yaml_to_json chart/values.yaml values.json
         - task: FileTransform@1
           inputs: 
+            folderPath: '$(System.DefaultWorkingDirectory)'
             fileType: json
             targetFiles: values.json
         - script:
