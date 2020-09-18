@@ -14,12 +14,6 @@ resources:
       endpoint: project-origin
       name: project-origin/pipeline-templates
 
-parameters:
-  - name: organization
-    type: string
-  - name: project
-    type: string
-
 variables:
   - name: releaseName
     value: 'base-setup'
@@ -42,7 +36,7 @@ jobs:
       valueFile: 'values.yaml'
       customStep: 
         script:
-          az pipelines variable-group variable list --organization ${{ parameters.organization }} --project "${{ parameters.project }}" --id 12 --output table
+          python3 env_to_yaml.py values.yaml && cat values.yaml
       pool:
         ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           name: $(poolName)
