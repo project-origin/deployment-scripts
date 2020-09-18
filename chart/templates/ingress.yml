@@ -32,13 +32,18 @@ spec:
         - {{ $root.Values.domain }}
 {{- end }}
 {{- range .Values.services }}
-{{- if .ingress }}
+{{- if and (.ingress) (not .tlsSecret) }}
+        - {{ .ingress.subdomain }}.{{ $root.Values.domain }}
+{{- end }}
+{{- end }}
+{{- range .Values.services }}
+{{- if and (.ingress) (.tlsSecret) }}
+    - secretName: {{ .tlsSecret }}
+      hosts:
         - {{ .ingress.subdomain }}.{{ $root.Values.domain }}
 {{- end }}
 {{- end }}
 {{- end }}
-
-
   rules:
   {{- if $root.Values.redirectDomainTo }}
   - host: {{ $root.Values.domain }}

@@ -91,6 +91,7 @@ services:
     grafanaRead: true
     flaskSecret: true
     webhookSecret: true
+    tlsSecret: 
     hydraClient:
       name: "Example Backend"
       callback: /auth/login/callback
