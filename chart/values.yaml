@@ -1,5 +1,4 @@
 
-
 protocol: https
 tls:
     rootSecret:
@@ -10,14 +9,19 @@ domain: dev.eloprindelse.dk
 redirectDomainTo: https://app.dev.eloprindelse.dk
 debug: 1
 
+# An AppInsights instrumentation key can be added.
+instrumentationKey: 
+
+first_measurement_time:
+last_measurement_time:
+
+
 email:
     sendgridKey: _
     support: _
     senderAddress: noreply@eloprindelse.dk
     senderName: Eloprindelse
-    
-# An AppInsights instrumentation key can be added.
-instrumentationKey: 
+ 
 
 eloverblik:
   service: 'https://apipreprod.eloverblik.dk/ThirdPartyApi'
@@ -29,8 +33,18 @@ eloverblik:
   requestAccessTo: '2020-12-31'
 
 postgres:
+  host:
+  username:
+  password:
   usernamePostfix: ''
   properties: '?sslmode=disable'
+
+
+storage:
+  energy_type:
+    name:
+    key:
+
 
 services:
 
