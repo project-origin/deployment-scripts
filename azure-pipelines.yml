@@ -36,7 +36,7 @@ jobs:
       valueFile: 'values.yaml'
       customStep: 
         script:
-          python3 env_to_yaml.py values.yaml
+          python3 env_to_yaml.py values.yaml && cat values.yaml
       pool:
         ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           name: $(poolName)
