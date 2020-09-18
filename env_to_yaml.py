@@ -3,28 +3,38 @@ import sys
 import yaml
 import json
 
-prefix = 'HELMVALUES_'
-seperator= '_'
+PREFIX = 'HELMVALUES__'
+SEPERATOR = '__'
+UPPERCASE = '_'
 
 values={}
 
-for env in os.environ:
-    if env.startswith(prefix):
+def upper_case(name):
+    
+    for i in [m.start() for m in re.finditer(UPPERCASE, name)]:
+        name = name[:i+1] + name[i+1].upper() + name[i+2:]
+    name = name.replace(UPPERCASE, '')
 
-        name = env[len(prefix):].lower()
+    return name
+
+
+for env in os.environ:
+    if env.startswith(PREFIX):
+
+        name = env[len(PREFIX):].lower()
 
         ref = values
 
         if len(name) > 0:
-            lst = name.split(seperator)
+            lst = name.split(SEPERATOR)
             for level in lst[:-1]:
-                if level not in ref:
-                    ref[level] = {}
-                ref = ref[level]
+                key = upper_case(level)
+                if key not in ref:
+                    ref[key] = {}
+                ref = ref[key]
             
-            ref[lst[-1]] = os.environ[env]
-
-print(json.dumps(values))
+            key = upper_case(lst[-1])
+            ref[key] = os.environ[env]
 
 with open(sys.argv[1], 'w') as file:
-    documents = yaml.dump(values, file)
+    documents = yaml.dump(values, file, default_flow_style=False)
