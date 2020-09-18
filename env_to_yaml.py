@@ -2,7 +2,7 @@ import os
 import sys
 import yaml
 
-prefix = 'secret2_'
+prefix = 'helmValues_'
 seperator= '_'
 
 values={}
