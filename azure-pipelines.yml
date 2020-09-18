@@ -33,7 +33,7 @@ jobs:
       namespace: $(namespace)
       releaseName: $(releaseName)
       deploymentEnvironment: $(deploymentEnvironment)
-      valueFile: values.yaml
+      valueFile: 'values.yaml'
       customStep: 
         script:
           python3 env_to_yaml.py values.yaml
