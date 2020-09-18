@@ -1,7 +1,7 @@
 
 {{- $root := . -}}
 {{- range .Values.services }}
-{{- if .hydra_client }}
+{{- if .hydraClient }}
 
 ---
 apiVersion: batch/v1
@@ -55,9 +55,9 @@ spec:
               name: {{ .name }}-hydra-secret
         env:
         - name: CLIENT_NAME
-          value: {{ .hydra_client.name | quote }}
+          value: {{ .hydraClient.name | quote }}
         - name: CLIENT_CALLBACK
-          value: https://{{ .ingress.subdomain }}.{{ $root.Values.domain }}{{ .hydra_client.callback }}
+          value: https://{{ .ingress.subdomain }}.{{ $root.Values.domain }}{{ .hydraClient.callback }}
       restartPolicy: Never
   backoffLimit: 20
 

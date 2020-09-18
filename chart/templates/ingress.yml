@@ -7,10 +7,10 @@ metadata:
   name: po-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
-    {{- if $root.Values.redirect_domain_to }}
+    {{- if $root.Values.redirectDomainTo }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       if ($host = '{{ $root.Values.domain }}') {
-        return 307 {{ $root.Values.redirect_domain_to }};
+        return 307 {{ $root.Values.redirectDomainTo }};
       }
     {{- end }}
 
@@ -19,18 +19,16 @@ metadata:
     cert-manager.io/cluster-issuer: {{ .Values.tls.issuer | quote }}
     {{- end }}
 spec:
-
 {{- if .Values.tls.secret }}
   tls:
-{{- if and ($root.Values.redirect_domain_to) (ne .Values.root_secret nil)}}
-    - secretName: {{ .Values.root_secret }}
+{{- if and ($root.Values.redirectDomainTo) ($root.Values.tls.rootSecret)}}
+    - secretName: {{ .Values.tls.rootSecret }}
       hosts:
         - {{ $root.Values.domain }}
 {{- end }}
-
     - secretName: {{ .Values.tls.secret }}
       hosts:
-{{- if and ($root.Values.redirect_domain_to) (eq .Values.root_secret nil)}}
+{{- if and ($root.Values.redirectDomainTo) (not $root.Values.tls.rootSecret)}}
         - {{ $root.Values.domain }}
 {{- end }}
 {{- range .Values.services }}
@@ -42,7 +40,7 @@ spec:
 
 
   rules:
-  {{- if $root.Values.redirect_domain_to }}
+  {{- if $root.Values.redirectDomainTo }}
   - host: {{ $root.Values.domain }}
     http:
       paths:

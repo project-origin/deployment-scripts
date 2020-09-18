@@ -57,7 +57,7 @@ spec:
                 --command 
                 "ALTER USER ${READONLY_USERNAME} WITH PASSWORD '${READONLY_PASSWORD}';"
               {{- range .Values.services }}
-              {{- if .grafana_read }}
+              {{- if .grafanaRead }}
               {{- $DB := printf "%s_service_db" .name | replace "-" "_" }}
                 --command
                 "\c {{ $DB }};"
@@ -122,13 +122,13 @@ spec:
             - "echo 'apiVersion: 1
               \ndeleteDatasources:
               {{- range $key, $val := .Values.services }}
-              {{- if .grafana_read }} 
+              {{- if .grafanaRead }} 
               \n  - name: {{ $key }}_service_db
               {{- end }}
               {{- end }}
               \ndatasources:
               {{- range $key, $val := .Values.services }}
-              {{- if .grafana_read }} 
+              {{- if .grafanaRead }} 
               \n  - name: {{ $key }}_service_db
               \n    type: postgres
               \n    postgresVersion: 1100

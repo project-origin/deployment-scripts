@@ -20,6 +20,7 @@ variables:
   - name: imageName
     value: 'projectorigin/$(releaseName)'
   - template: vars.yml@templates
+  - template: helm-values.yml@templates
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -32,7 +33,10 @@ jobs:
       namespace: $(namespace)
       releaseName: $(releaseName)
       deploymentEnvironment: $(deploymentEnvironment)
-      secureFileName: $(secureFileName)
+      valueFile: values.yaml
+      customStep: 
+        script:
+          python3 env_to_yaml.py values.yaml
       pool:
         ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           name: $(poolName)
