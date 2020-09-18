@@ -86,7 +86,7 @@ services:
   exampleBackend:
     name: example-backend
     ingress: 
-      subdomain: api-app
+      subdomain: api.app
     database: true
     grafanaRead: true
     flaskSecret: true
