@@ -8,6 +8,7 @@ seperator= '_'
 values={}
 
 for env in os.environ:
+    print(env)
     if env.startswith(prefix):
 
         name = env[len(prefix):]
@@ -23,7 +24,9 @@ for env in os.environ:
             
             ref[lst[-1]] = os.environ[env]
 
+print("before")
 print(values)
+print("after")
 
 with open(sys.argv[1], 'w') as file:
     documents = yaml.dump(values, file)
