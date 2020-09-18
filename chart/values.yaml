@@ -12,8 +12,8 @@ debug: 1
 # An AppInsights instrumentation key can be added.
 instrumentationKey: 
 
-first_measurement_time:
-last_measurement_time:
+firstMeasurementTime:
+lastMeasurementTime:
 
 
 email:
@@ -41,7 +41,7 @@ postgres:
 
 
 storage:
-  energy_type:
+  energyType:
     name:
     key:
 

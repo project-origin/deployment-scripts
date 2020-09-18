@@ -8,6 +8,11 @@ DESTINATIONFILE = sys.argv[3]
 
 print(CONVERSION, SOURCEFILE, DESTINATIONFILE)
 
+def represent_none(self, _):
+    return self.represent_scalar('tag:yaml.org,2002:null', '')
+
+yaml.add_representer(type(None), represent_none)
+
 if CONVERSION == 'yaml_to_json':
     with open(SOURCEFILE, 'r') as file:
         data = yaml.load(file.read())
