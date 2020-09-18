@@ -33,10 +33,17 @@ jobs:
       namespace: $(namespace)
       releaseName: $(releaseName)
       deploymentEnvironment: $(deploymentEnvironment)
-      valueFile: 'values.yaml'
-      customStep: 
-        script:
-          python3 env_to_yaml.py values.yaml && cat values.yaml
+      preDeploy:
+        - script:
+            python3 yaml_json_converter.py yaml-json chart/values.yaml values.json
+        - task: FileTransform@1
+          inputs: 
+            fileType: json
+            targetFiles: values.json
+        - script:
+            python3 yaml_json_converter.py json-yaml values.json chart/values.yaml 
+        - script:
+            cat chart/values.yaml
       pool:
         ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           name: $(poolName)
