@@ -1,22 +1,27 @@
 
-
 protocol: https
 tls:
+    rootSecret:
     secret: 
     issuer: 
 
 domain: dev.eloprindelse.dk
-redirect_domain_to: https://app.dev.eloprindelse.dk
+redirectDomainTo: https://app.dev.eloprindelse.dk
 debug: 1
 
-email:
-    sendgrid_key: _
-    support: _
-    sender_address: noreply@eloprindelse.dk
-    sender_name: Eloprindelse
-    
 # An AppInsights instrumentation key can be added.
-instrumentation_key: 
+instrumentationKey: 
+
+firstMeasurementTime:
+lastMeasurementTime:
+
+
+email:
+    sendgridKey: _
+    support: _
+    senderAddress: noreply@eloprindelse.dk
+    senderName: Eloprindelse
+ 
 
 eloverblik:
   service: 'https://apipreprod.eloverblik.dk/ThirdPartyApi'
@@ -24,12 +29,22 @@ eloverblik:
   thirdpartyid: 'GUIIntroThirdParty01TpId'
   # This is a token in the public test system, you an generate your own if this is out of date.
   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJUSElSRFBBUlRZQVBJX1JlZnJlc2giLCJ0b2tlbmlkIjoiNzIyMjI1NDktNTFmZi00ZjI0LWEwOTYtMmU1MWM2OTRkYmFhIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiJHVUlJbnRyb1RoaXJkUGFydHkwMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6IkZvcm5hdm4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zdXJuYW1lIjoiRWZ0ZXJuYXZuIiwianRpIjoiNzIyMjI1NDktNTFmZi00ZjI0LWEwOTYtMmU1MWM2OTRkYmFhIiwiY3ZyIjoiMjcwNzE0MDEiLCJ0cGlkIjoiR1VJSW50cm9UaGlyZFBhcnR5MDFUcElkIiwibG9naW5UeXBlIjoiS2V5Q2FyZCIsImV4cCI6MTYxOTYwNjUwMCwiaXNzIjoiRW5lcmdpbmV0IiwidG9rZW5OYW1lIjoibnktdGVzdC10b2tlbiIsInJvbGVzIjoiUmVhZFByaXZhdGUsIFJlYWRCdXNpbmVzcyIsImF1ZCI6IkVuZXJnaW5ldCJ9.TeN20r7yej0WGZu87flUdV4TGoJAOp7UQN2nLoiG0-M
-  request_access_from: '2020-04-01'
-  request_access_to: '2020-12-31'
+  requestAccessFrom: '2020-04-01'
+  requestAccessTo: '2020-12-31'
 
 postgres:
-  username_postfix: ''
+  host:
+  username:
+  password:
+  usernamePostfix: ''
   properties: '?sslmode=disable'
+
+
+storage:
+  energyType:
+    name:
+    key:
+
 
 services:
 
@@ -38,10 +53,10 @@ services:
     ingress: 
       subdomain: account
     database: true
-    grafana_read: true
-    flask_secret: true
-    webhook_secret: true
-    hydra_client:
+    grafanaRead: true
+    flaskSecret: true
+    webhookSecret: true
+    hydraClient:
       name: "Account Service"
       callback: /auth/login/callback
     ports:
@@ -54,29 +69,30 @@ services:
     ingress: 
       subdomain: datahub
     database: true
-    grafana_read: true
-    flask_secret: true
+    grafanaRead: true
+    flaskSecret: true
     ports:
       - name: 'http'
         port: 80
         targetPort: 8089
   
-  energy_type:
+  energyType:
     name: energy-type
     ports:
       - name: 'http'
         port: 80
         targetPort: 8765
 
-  example_backend:
+  exampleBackend:
     name: example-backend
     ingress: 
       subdomain: api.app
     database: true
-    grafana_read: true
-    flask_secret: true
-    webhook_secret: true
-    hydra_client:
+    grafanaRead: true
+    flaskSecret: true
+    webhookSecret: true
+    tlsSecret: 
+    hydraClient:
       name: "Example Backend"
       callback: /auth/login/callback
     ports:
@@ -84,7 +100,7 @@ services:
         port: 80
         targetPort: 8081
 
-  example_frontend:
+  exampleFrontend:
     name: example-frontend
     ingress: 
       subdomain: app
@@ -98,8 +114,8 @@ services:
     ingress: 
       subdomain: identity
     database: true
-    grafana_read: true
-    flask_secret: true
+    grafanaRead: true
+    flaskSecret: true
     ports:
       - name: 'http'
         port: 80
@@ -110,7 +126,7 @@ services:
     ingress: 
       subdomain: oauth
     database: true
-    flask_secret: true
+    flaskSecret: true
     ports:
       - name: 'public-interface'
         port: 80
