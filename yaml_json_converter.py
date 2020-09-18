@@ -8,7 +8,7 @@ DESTINATIONFILE = sys.argv[3]
 
 print(CONVERSION, SOURCEFILE, DESTINATIONFILE)
 
-if CONVERSION == 'yamltojson':
+if CONVERSION == 'yaml_to_json':
     with open(SOURCEFILE, 'r') as file:
         data = yaml.load(file.read())
 
@@ -16,7 +16,7 @@ if CONVERSION == 'yamltojson':
         json.dump(data, file, indent=2)
 
 
-elif  CONVERSION == 'jsontoyaml':
+elif  CONVERSION == 'json_to_yaml':
     with open(SOURCEFILE, 'r') as file:
         data = json.load(file)
 
@@ -24,4 +24,4 @@ elif  CONVERSION == 'jsontoyaml':
         file.write(yaml.dump(data), default_flow_style=False)
 
 else:
-    exit 1
+    exit(1)

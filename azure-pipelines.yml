@@ -35,13 +35,13 @@ jobs:
       deploymentEnvironment: $(deploymentEnvironment)
       preDeploy:
         - script:
-            python3 yaml_json_converter.py yamltojson chart/values.yaml values.json
+            python3 yaml_json_converter.py yaml_to_json chart/values.yaml values.json
         - task: FileTransform@1
           inputs: 
             fileType: json
             targetFiles: values.json
         - script:
-            python3 yaml_json_converter.py jsontoyaml values.json chart/values.yaml 
+            python3 yaml_json_converter.py json_to_yaml values.json chart/values.yaml 
         - script:
             cat chart/values.yaml
       pool:
