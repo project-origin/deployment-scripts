@@ -36,7 +36,7 @@ jobs:
       valueFile: 'values.yaml'
       customStep: 
         script:
-          python3 env_to_yaml.py values.yaml
+          az pipelines variable-group variable list --id 12 --output table
       pool:
         ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           name: $(poolName)
