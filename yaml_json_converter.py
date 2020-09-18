@@ -21,7 +21,7 @@ elif  CONVERSION == 'json_to_yaml':
         data = json.load(file)
 
     with open(DESTINATIONFILE, 'w') as file:
-        file.write(yaml.dump(data), default_flow_style=False)
+        file.write(yaml.dump(data, default_flow_style=False))
 
 else:
     exit(1)
