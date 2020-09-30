@@ -12,6 +12,9 @@ metadata:
       if ($host = '{{ $root.Values.domain }}') {
         return 307 {{ $root.Values.redirectDomainTo }};
       }
+      if ($host = 'www.{{ $root.Values.domain }}') {
+        return 307 {{ $root.Values.redirectDomainTo }};
+      }
     {{- end }}
 
     {{- if .Values.tls.issuer }}
@@ -47,6 +50,13 @@ spec:
   rules:
   {{- if $root.Values.redirectDomainTo }}
   - host: {{ $root.Values.domain }}
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: example-frontend-service
+            servicePort: 80
+  - host: www.{{ $root.Values.domain }}
     http:
       paths:
         - path: /
