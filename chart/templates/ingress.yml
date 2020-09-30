@@ -28,12 +28,10 @@ spec:
     - secretName: {{ .Values.tls.rootSecret }}
       hosts:
         - {{ $root.Values.domain }}
-    - secretName: {{ .Values.tls.secret }}
-      hosts:
-        - www.{{ $root.Values.domain }}
 {{- end }}
     - secretName: {{ .Values.tls.secret }}
       hosts:
+        - www.{{ $root.Values.domain }}
 {{- if and ($root.Values.redirectDomainTo) (not $root.Values.tls.rootSecret)}}
         - {{ $root.Values.domain }}
 {{- end }}
