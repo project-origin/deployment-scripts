@@ -28,7 +28,7 @@ spec:
     - secretName: {{ .Values.tls.rootSecret }}
       hosts:
         - {{ $root.Values.domain }}
-    - secretName: {{ .Values.tls.rootSecret }}
+    - secretName: {{ .Values.tls.secret }}
       hosts:
         - www.{{ $root.Values.domain }}
 {{- end }}
