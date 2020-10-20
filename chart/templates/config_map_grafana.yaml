@@ -7,7 +7,7 @@ data:
   GF_DATABASE_TYPE: 'postgres'
   GF_DATABASE_SSL_MODE: {{ .Values.services.grafana.sslmode | quote }} 
   GF_SERVER_ROOT_URL: '{{ .Values.protocol }}://{{ .Values.services.grafana.ingress.subdomain }}.{{ .Values.domain }}/'
-  GF_SMTP_ENABLED: true
+  GF_SMTP_ENABLED: 'true'
   GF_SMTP_HOST: 'smtp.sendgrid.net:465'
   GF_SMTP_USER: 'apikey'
   GF_SMTP_PASSWORD: '{{ .Values.email.sendgridKey }}'
