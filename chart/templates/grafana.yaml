@@ -98,6 +98,7 @@ spec:
                   key: PASSWORD
           restartPolicy: OnFailure
 ---
+{{- $postfix := $root.Values.postgres.usernamePostfix | replace "%40" "@" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
