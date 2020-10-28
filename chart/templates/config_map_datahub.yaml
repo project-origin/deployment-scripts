@@ -18,13 +18,13 @@ data:
   REDIS_CACHE_DB: '6'
   REDIS_BROKER_DB: '7'
   REDIS_BACKEND_DB: '8'
-  {{- if eq (default .Values.useFakeEloverblik "0") "1" }}
+{{- if eq (default .Values.useFakeEloverblik "0") "1" }}
   ELOVERBLIK_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.fakeEloverblik.name }}'
   ELOVERBLIK_ONBOARDING_URL: '{{ .Values.protocol }}://{{ .Values.fakeEloverblik.name }}/onboarding'
-  {{ else }}
+{{ else }}
   ELOVERBLIK_SERVICE_URL: '{{ .Values.eloverblik.service }}'
   ELOVERBLIK_ONBOARDING_URL: '{{ .Values.eloverblik.onboarding }}'
-  {{ end }}
+{{ end }}
   ELOVERBLIK_THIRD_PARTY_ID: '{{ .Values.eloverblik.thirdpartyid }}'
   ELOVERBLIK_REQUEST_ACCESS_FROM: '{{ .Values.eloverblik.requestAccessFrom }}'
   ELOVERBLIK_REQUEST_ACCESS_TO: '{{ .Values.eloverblik.requestAccessTo }}'
