@@ -86,7 +86,6 @@ services:
 
   fakeEloverblik:
     name: fake-eloverblik
-    condition: {{ eq (default $.Values.useFakeEloverblik "0") "1" }}
     database: true
     ports:
       - name: 'http'
