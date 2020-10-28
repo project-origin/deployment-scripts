@@ -8,6 +8,7 @@ tls:
 domain: dev.eloprindelse.dk
 redirectDomainTo: https://app.dev.eloprindelse.dk
 debug: 1
+useFakeEloverblik: 0
 
 # An AppInsights instrumentation key can be added.
 instrumentationKey: 
@@ -78,6 +79,14 @@ services:
   
   energyType:
     name: energy-type
+    ports:
+      - name: 'http'
+        port: 80
+        targetPort: 8765
+
+  fakeEloverblik:
+    name: fake-eloverblik
+    database: true
     ports:
       - name: 'http'
         port: 80
