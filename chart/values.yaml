@@ -90,7 +90,7 @@ services:
     ports:
       - name: 'http'
         port: 80
-        targetPort: 8765
+        targetPort: 8766
 
   exampleBackend:
     name: example-backend
