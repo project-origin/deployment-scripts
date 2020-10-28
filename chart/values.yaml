@@ -84,15 +84,14 @@ services:
         port: 80
         targetPort: 8765
 
-  {{- if eq (default .Values.useFakeEloverblik "0") "1" }}
   fakeEloverblik:
     name: fake-eloverblik
+    condition: {{ eq (default $.Values.useFakeEloverblik "0") "1" }}
     database: true
     ports:
       - name: 'http'
         port: 80
         targetPort: 8765
-  {{ end }}
 
   exampleBackend:
     name: example-backend
