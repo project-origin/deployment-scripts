@@ -19,8 +19,8 @@ data:
   REDIS_BROKER_DB: '7'
   REDIS_BACKEND_DB: '8'
 {{- if .Values.useFakeEloverblik }}
-  ELOVERBLIK_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.fakeEloverblik.name }}'
-  ELOVERBLIK_ONBOARDING_URL: '{{ .Values.protocol }}://{{ .Values.fakeEloverblik.name }}/onboarding'
+  ELOVERBLIK_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.services.fakeEloverblik.name }}'
+  ELOVERBLIK_ONBOARDING_URL: '{{ .Values.protocol }}://{{ .Values.services.fakeEloverblik.name }}/onboarding'
 {{ else }}
   ELOVERBLIK_SERVICE_URL: '{{ .Values.eloverblik.service }}'
   ELOVERBLIK_ONBOARDING_URL: '{{ .Values.eloverblik.onboarding }}'
