@@ -18,7 +18,7 @@ data:
   REDIS_CACHE_DB: '6'
   REDIS_BROKER_DB: '7'
   REDIS_BACKEND_DB: '8'
-  {{- if eq .Values.useFakeEloverblik 1 }}
+  {{- if eq .Values.useFakeEloverblik '1' }}
     ELOVERBLIK_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.fakeEloverblik.name }}'
     ELOVERBLIK_ONBOARDING_URL: '{{ .Values.protocol }}://{{ .Values.fakeEloverblik.name }}/onboarding'
   {{ else }}
