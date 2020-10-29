@@ -87,7 +87,7 @@ services:
   fakeEloverblik:
     name: fake-eloverblik
     ingress:
-      subdomain: fake-eloverblik
+      subdomain: eloverblik
     database: true
     ports:
       - name: 'http'
