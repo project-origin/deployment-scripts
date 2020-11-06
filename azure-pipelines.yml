@@ -46,7 +46,7 @@ jobs:
         - script: python3 yaml_json_converter.py json_to_yaml values.json chart/values.yaml
           displayName: Convert values.json to values.yaml
       pool:
-        ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+        ${{ if or(eq(variables['Build.SourceBranchName'], 'master'), eq(variables['Build.SourceBranchName'], 'demo')) }}:
           name: $(poolName)
         ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
           vmImage: 'ubuntu-latest'
