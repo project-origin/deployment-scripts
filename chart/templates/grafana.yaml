@@ -135,7 +135,7 @@ spec:
               \n    postgresVersion: 1100
               \n    url: postgres-service
               \n    database: {{ $key }}_service_db
-              \n    user: ${READONLY_USERNAME}{{ $postfix }}
+              \n    user: ${READONLY_USERNAME}{{ $root.Values.postgres.usernamePostfix }}
               \n    jsonData:
               \n      maxOpenConns: 1
               \n      sslmode: {{ $root.Values.services.grafana.sslmode }}
