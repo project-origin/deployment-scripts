@@ -1,0 +1,12 @@
+
+protocol: http
+domain: local.eloprindelse.dk
+redirectDomainTo: https://app.local.eloprindelse.dk
+debug: 1
+useFakeEloverblik: true
+
+
+storage:
+  energyType:
+    name: #value must be added
+    key: #value must be added
