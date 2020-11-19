@@ -57,6 +57,12 @@ persistentVolumeClaims:
     localPath: 
     size: 50Gi
 
+  postgresStorageDisk:
+    name: postgres-storage-disk
+    storageClassName: managed-premium
+    localPath: 
+    size: 5Gi
+
 storage:
   energyType:
     type: azureFile
