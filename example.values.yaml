@@ -1,12 +1,73 @@
 
 protocol: http
-domain: local.eloprindelse.dk
-redirectDomainTo: https://app.local.eloprindelse.dk
+domain: localhost.eloprindelse.dk
+redirectDomainTo: https://app.localhost.eloprindelse.dk
 debug: 1
 useFakeEloverblik: true
 
 
+persistentVolumeClaims:
+
+  # ledgerKeyDisk:
+  #   name: ledger-key-disk
+  #   storageClassName: manual
+  #   localPath: /mnt/data/ledger-key-disk
+  #   size: 1Gi
+
+  # ledgerStorageDisk:
+  #   name: ledger-storage-disk
+  #   storageClassName: manual
+  #   localPath: /mnt/data/ledger-storage-disk
+  #   size: 1Gi
+
+  # postgresStorageDisk:
+  #   name: postgres-storage-disk
+  #   storageClassName: manual
+  #   localPath: /mnt/data/postgres-storage-disk
+  #   size: 1Gi
+
+  energyTypeDisk:
+    name: energy-type-disk
+    storageClassName: manual
+    localPath: /mnt/data/energy-type-disk
+    size: 1Gi
+
 storage:
   energyType:
-    name: #value must be added
-    key: #value must be added
+    type: persistentVolumeClaim
+
+
+services:
+  grafana:
+    sslmode: 'disable'
+
+# installs entire setup
+subchartInstall: true
+
+account-service:
+  tag: v1.0.176-ge6df23f
+
+datahub_processor:
+  tag: v1.0.105-gfa73356
+  disks:
+    ledger-storage-disk:
+      claim: ""
+    ledger-key-disk:
+      claim: ""
+
+datahub-service:
+  tag: v1.0.148-gd762eb7
+
+energy-type-service:
+  tag: v1.0.52-g7406400
+  type: persistentVolumeClaim
+  claimName: energy-type-disk
+
+example-backend:
+  tag: v1.0.135-g14b359e
+
+example-frontend:
+  tag: v1.0.77-g1fcc1ba
+    
+identity-service:
+  tag: v1.0.53-g9eb348b

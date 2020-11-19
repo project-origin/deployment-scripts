@@ -58,7 +58,7 @@ spec:
           value: {{ .hydraClient.name | quote }}
         - name: CLIENT_CALLBACK
           value: https://{{ .ingress.subdomain }}.{{ $root.Values.domain }}{{ .hydraClient.callback }}
-      restartPolicy: Never
+      restartPolicy: OnFailure
   backoffLimit: 20
 
 

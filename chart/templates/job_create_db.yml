@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: create-db-{{ .name }}-container
-        image: postgres:9.6
+        image: postgres:11.9
         command:
           - bash
           - -c
@@ -30,6 +30,7 @@ spec:
             "CREATE DATABASE ${NEW_DB} OWNER ${NEW_USER};"
             --command
             "REVOKE ${NEW_USER} FROM $(echo $PGUSER | cut -f1 -d@);"
+          - echo "${NEW_USER}"
         env:
         - name: PGHOST
           value: 'postgres-service'
@@ -62,7 +63,7 @@ spec:
             secretKeyRef:
               name: {{ .name }}-db-secret
               key: DATABASE
-      restartPolicy: Never
+      restartPolicy: OnFailure
   backoffLimit: 20
 
 {{- end }}

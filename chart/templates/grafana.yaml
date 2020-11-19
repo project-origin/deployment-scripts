@@ -98,6 +98,7 @@ spec:
                   key: PASSWORD
           restartPolicy: OnFailure
 ---
+{{- $postfix := $root.Values.postgres.usernamePostfix | replace "%40" "@" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -114,7 +115,7 @@ spec:
     spec:
       containers:
         - name: grafana-container
-          image: grafana/grafana:7.1.3
+          image: grafana/grafana:7.3.2
           command:
             - bash
             - -c
@@ -134,7 +135,7 @@ spec:
               \n    postgresVersion: 1100
               \n    url: postgres-service
               \n    database: {{ $key }}_service_db
-              \n    user: ${READONLY_USERNAME}{{ $root.Values.postgres.usernamePostfix }}
+              \n    user: ${READONLY_USERNAME}{{ $postfix }}
               \n    jsonData:
               \n      maxOpenConns: 1
               \n      sslmode: {{ $root.Values.services.grafana.sslmode }}
