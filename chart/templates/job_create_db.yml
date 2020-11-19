@@ -1,18 +1,19 @@
 
 {{- $root := . -}}
 {{- range .Values.services }}
-{{- if .database }}
+{{- $job_name := printf "create-db-%s-job" .name }}
+{{- if (.database) }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: create-db-{{ .name }}-job
+  name: {{ $job_name }}
 spec:
   template:
     spec:
       containers:
       - name: create-db-{{ .name }}-container
-        image: postgres:11.9
+        image: postgres:9.6
         command:
           - bash
           - -c
@@ -30,7 +31,6 @@ spec:
             "CREATE DATABASE ${NEW_DB} OWNER ${NEW_USER};"
             --command
             "REVOKE ${NEW_USER} FROM $(echo $PGUSER | cut -f1 -d@);"
-          - echo "${NEW_USER}"
         env:
         - name: PGHOST
           value: 'postgres-service'
@@ -63,7 +63,7 @@ spec:
             secretKeyRef:
               name: {{ .name }}-db-secret
               key: DATABASE
-      restartPolicy: OnFailure
+      restartPolicy: Never
   backoffLimit: 20
 
 {{- end }}
