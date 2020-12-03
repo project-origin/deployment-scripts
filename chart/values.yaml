@@ -10,6 +10,7 @@ tls:
 domain: dev.eloprindelse.dk
 redirectDomainTo: https://app.dev.eloprindelse.dk
 debug: 1
+logLevel: DEBUG
 useFakeEloverblik:
 
 # An AppInsights instrumentation key can be added.
