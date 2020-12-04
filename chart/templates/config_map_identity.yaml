@@ -4,6 +4,7 @@ metadata:
   name: identity-config
 data:
   DATABASE_CONN_POLL_SIZE: '3'
+  LOG_LEVEL: '{{ .Values.logLevel }}'
   TOKEN_EXPIRE_MINUTES: '4320'
   CONSENT_EXPIRE_MINUTES: '525600'
   PROJECT_URL: '{{ .Values.protocol }}://{{ .Values.services.identity.ingress.subdomain }}.{{ .Values.domain }}'

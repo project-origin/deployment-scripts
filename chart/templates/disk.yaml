@@ -1,25 +1,35 @@
----
+{{- $root := . -}}
+{{- range .Values.persistentVolumeClaims }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ledger-key-disk
+  name: {{ .name }}
 spec:
   accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
+    - ReadWriteOnce
+  storageClassName: {{ .storageClassName }}
   resources:
     requests:
-      storage: 50Gi
+      storage: {{ .size }}
+
+{{- if eq .storageClassName "manual" }}
+  volumeName: {{ .name }}-volume
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: ledger-storage-disk
+  name: {{ .name }}-volume
 spec:
+  storageClassName: manual
+  capacity:
+    storage: {{ .size }}
   accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 50Gi
----
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .localPath }}
+{{- end }}
+
+{{- end }}
+# ---
+
+

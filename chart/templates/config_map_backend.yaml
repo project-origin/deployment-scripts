@@ -4,6 +4,7 @@ metadata:
   name: example-backend-config
 data:
   DATABASE_CONN_POLL_SIZE: '3'
+  LOG_LEVEL: '{{ .Values.logLevel }}'
   CORS_ORIGINS: '{{ .Values.protocol }}://{{ .Values.services.exampleFrontend.ingress.subdomain }}.{{ .Values.domain }}'
   PROJECT_URL: '{{ .Values.protocol }}://{{ .Values.services.exampleBackend.ingress.subdomain }}.{{ .Values.domain }}'
   FRONTEND_URL: '{{ .Values.protocol }}://{{ .Values.services.exampleFrontend.ingress.subdomain }}.{{ .Values.domain }}'
