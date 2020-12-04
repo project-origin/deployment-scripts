@@ -1,13 +1,13 @@
 
 {{- $root := . -}}
 {{- range .Values.services }}
-{{- if .hydraClient }}
-
+{{- $job_name := printf "hydra-create-client-%s-job" .name }}
+{{- if (.hydraClient) }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hydra-create-client-{{ .name }}-job
+  name: {{ $job_name }}
 spec:
   ttlSecondsAfterFinished: 60
   template:

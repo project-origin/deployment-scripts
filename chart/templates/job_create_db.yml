@@ -1,12 +1,13 @@
 
 {{- $root := . -}}
 {{- range .Values.services }}
-{{- if .database }}
+{{- $job_name := printf "create-db-%s-job" .name }}
+{{- if (.database) }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: create-db-{{ .name }}-job
+  name: {{ $job_name }}
 spec:
   template:
     spec:

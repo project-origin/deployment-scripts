@@ -5,9 +5,12 @@ tls:
     secret: 
     issuer: 
 
+
+
 domain: dev.eloprindelse.dk
 redirectDomainTo: https://app.dev.eloprindelse.dk
 debug: 1
+logLevel: DEBUG
 useFakeEloverblik:
 
 # An AppInsights instrumentation key can be added.
@@ -16,6 +19,7 @@ instrumentationKey:
 firstMeasurementTime:
 lastMeasurementTime:
 
+subchartInstall: false
 
 email:
     sendgridKey: _
@@ -40,9 +44,29 @@ postgres:
   usernamePostfix: ''
   properties: '?sslmode=disable'
 
+persistentVolumeClaims:
+
+  ledgerKeyDisk:
+    name: ledger-key-disk
+    storageClassName: managed-premium
+    localPath: 
+    size: 50Gi
+
+  ledgerStorageDisk:
+    name: ledger-storage-disk
+    storageClassName: managed-premium
+    localPath: 
+    size: 50Gi
+
+  postgresStorageDisk:
+    name: postgres-storage-disk
+    storageClassName: managed-premium
+    localPath: 
+    size: 5Gi
 
 storage:
   energyType:
+    type: azureFile
     name:
     key:
 
