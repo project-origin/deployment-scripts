@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-jumphost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-jumphost
+  template:
+    metadata:
+      labels:
+        app: db-jumphost
+    spec:
+      containers:
+      - name: db-jumphost
+        image: postgres:9.6
+        command:
+          - bash
+          - -c
+        args:
+          - sleep infinity
+        env:
+        - name: PGHOST
+          value: 'postgres-service'
+        - name: PGPORT
+          value: '5432'
+        - name: PGDATABASE
+          value: 'postgres'
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: USERNAME
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-master-secret
+              key: PASSWORD

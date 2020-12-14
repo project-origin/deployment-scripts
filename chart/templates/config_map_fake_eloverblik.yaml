@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: fake-eloverblik-config
 data:
+  LOG_LEVEL: '{{ .Values.logLevel }}'
   ENERGY_TYPE_SERVICE_URL: 'http://{{ .Values.services.energyType.name }}-service'

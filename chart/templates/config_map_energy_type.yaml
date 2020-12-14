@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: energy-type-config
 data:
+  LOG_LEVEL: '{{ .Values.logLevel }}'
   ENERGYCODE_FILE: /mnt/energy/mapped.parquet
   E18_EMISSION_FILE: /mnt/energy/e18_emission.parquet
   MIX_FILE: /mnt/energy/mix.parquet
