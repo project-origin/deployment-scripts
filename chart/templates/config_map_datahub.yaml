@@ -4,6 +4,7 @@ metadata:
   name: datahub-config
 data:
   DATABASE_CONN_POLL_SIZE: '3'
+  LOG_LEVEL: '{{ .Values.logLevel }}'
   CORS_ORIGINS: '{{ .Values.protocol }}://{{ .Values.services.exampleFrontend.ingress.subdomain }}.{{ .Values.domain }}'
   PROJECT_URL: '{{ .Values.protocol }}://{{ .Values.services.datahub.ingress.subdomain }}.{{ .Values.domain }}'
   ACCOUNT_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.services.account.ingress.subdomain }}.{{ .Values.domain }}'
@@ -18,9 +19,14 @@ data:
   REDIS_CACHE_DB: '6'
   REDIS_BROKER_DB: '7'
   REDIS_BACKEND_DB: '8'
-  ELOVERBLIK_THIRD_PARTY_ID: '{{ .Values.eloverblik.thirdpartyid }}'
+{{- if .Values.useFakeEloverblik }}
+  ELOVERBLIK_SERVICE_URL: '{{ .Values.protocol }}://{{ .Values.services.fakeEloverblik.ingress.subdomain }}.{{ .Values.domain }}'
+  ELOVERBLIK_ONBOARDING_URL: '{{ .Values.protocol }}://{{ .Values.services.fakeEloverblik.ingress.subdomain }}.{{ .Values.domain }}/onboarding'
+{{ else }}
   ELOVERBLIK_SERVICE_URL: '{{ .Values.eloverblik.service }}'
   ELOVERBLIK_ONBOARDING_URL: '{{ .Values.eloverblik.onboarding }}'
+{{ end }}
+  ELOVERBLIK_THIRD_PARTY_ID: '{{ .Values.eloverblik.thirdpartyid }}'
   ELOVERBLIK_REQUEST_ACCESS_FROM: '{{ .Values.eloverblik.requestAccessFrom }}'
   ELOVERBLIK_REQUEST_ACCESS_TO: '{{ .Values.eloverblik.requestAccessTo }}'
 {{- if .Values.firstMeasurementTime }}

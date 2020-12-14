@@ -1,5 +1,5 @@
 apiVersion: v2
-name: pochart
+name: project-origin
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
@@ -21,3 +21,34 @@ version: 0.1.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 appVersion: 1.16.0
+
+
+dependencies: # A list of the chart requirements (optional)
+  - name: account-service
+    repository: "file://../../account-service/chart"
+    version: 0.1.0
+    condition: subchartInstall
+  - name: datahub_processor
+    repository: "file://../../datahub_processor/chart"
+    version: 0.1.0
+    condition: subchartInstall
+  - name: datahub-service
+    repository: "file://../../datahub-service/chart"
+    version: 0.1.0
+    condition: subchartInstall
+  - name: energy-type-service
+    repository: "file://../../energy-type-service/chart"
+    version: 0.1.0
+    condition: subchartInstall
+  - name: example-backend
+    repository: "file://../../example-backend/chart"
+    version: 0.1.0
+    condition: subchartInstall
+  - name: example-frontend
+    repository: "file://../../example-frontend/chart"
+    version: 0.1.0
+    condition: subchartInstall
+  - name: identity-service
+    repository: "file://../../identity-service/chart"
+    version: 0.1.0
+    condition: subchartInstall
