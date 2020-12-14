@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db-jumphost
-  namespace: cs03-project-origin-b-01
 spec:
   replicas: 1
   selector:
